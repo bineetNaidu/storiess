@@ -3,8 +3,8 @@ import { Field, ObjectType } from 'type-graphql';
 import { prop as Property, getModelForClass } from '@typegoose/typegoose';
 
 @ObjectType()
-class UserModel {
-  @Field()
+export class User {
+  @Field(() => String)
   readonly _id: ObjectId;
 
   @Field()
@@ -27,4 +27,4 @@ class UserModel {
   password!: string;
 }
 
-export const User = getModelForClass(UserModel);
+export const UserModel = getModelForClass(User);

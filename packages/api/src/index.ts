@@ -4,6 +4,7 @@ import { ApolloServer } from 'apollo-server';
 import { buildSchema } from 'type-graphql';
 import { HelloResolver } from './resolvers/Hello';
 import { connectDb } from './configs/connectDb';
+import { UserResolver } from './resolvers/users';
 
 dotenv.config();
 
@@ -12,7 +13,7 @@ const bootstrap = async () => {
     const server = new ApolloServer({
       schema: await buildSchema({
         validate: false,
-        resolvers: [HelloResolver],
+        resolvers: [HelloResolver, UserResolver],
       }),
     });
 
