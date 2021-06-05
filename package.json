@@ -1,0 +1,23 @@
+{
+  "name": "stories",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "description": "A web application to share your stories with the world on 'Stories'.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bineetNaidu/stories.git"
+  },
+  "keywords": [],
+  "author": "BineetNaidu <bineetnaiduapps@gmail.com> (https://bineetnaidu.github.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bineetNaidu/stories/issues"
+  },
+  "homepage": "https://github.com/bineetNaidu/stories#readme",
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
