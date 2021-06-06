@@ -24,6 +24,9 @@ export class User {
   username!: string;
 
   @Property({ required: true })
+  googleId!: string;
+
+  @Property({ required: true })
   password!: string;
 }
 

@@ -9,6 +9,8 @@ class UserInput {
   email: string;
   @Field()
   password: string;
+  @Field()
+  googleId: string;
 }
 
 @Resolver()
