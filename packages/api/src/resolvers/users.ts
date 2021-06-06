@@ -24,9 +24,11 @@ class UserInput {
 
 @Resolver()
 export class UserResolver {
-  @Query(() => [User])
-  async users(): Promise<User[]> {
-    return UserModel.find({});
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() { req }: MyContext): Promise<User | null> {
+    return UserModel.findOne({
+      _id: req.session.userId as string,
+    });
   }
 
   @Mutation(() => User)
