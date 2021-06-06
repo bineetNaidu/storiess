@@ -2,12 +2,14 @@ import 'reflect-metadata';
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
+import session from 'express-session';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { HelloResolver } from './resolvers/Hello';
 import { connectDb } from './configs/connectDb';
 import { UserResolver } from './resolvers/users';
 import { MyContext } from './utils/types';
+import { COOKIE_NAME, ___prod___ } from './utils/constants';
 
 dotenv.config();
 
@@ -21,6 +23,20 @@ const bootstrap = async () => {
       cors({
         origin: 'http://localhost:3000',
         credentials: true,
+      })
+    );
+    app.use(
+      session({
+        name: COOKIE_NAME,
+        cookie: {
+          maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
+          httpOnly: true,
+          sameSite: 'lax', // csrf
+          secure: ___prod___, // cookie only works in https
+        },
+        saveUninitialized: false,
+        secret: process.env.SESSION_SECRET!,
+        resave: false,
       })
     );
 
