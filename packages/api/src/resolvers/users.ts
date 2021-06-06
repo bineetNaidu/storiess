@@ -8,8 +8,6 @@ class UserInput {
   @Field()
   email: string;
   @Field()
-  password: string;
-  @Field()
   googleId: string;
 }
 

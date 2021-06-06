@@ -20,14 +20,11 @@ export class User {
   bio?: string;
 
   @Field()
-  @Property({ required: true, unique: true })
+  @Property({ required: true, unique: true, trim: true })
   username!: string;
 
   @Property({ required: true })
   googleId!: string;
-
-  @Property({ required: true })
-  password!: string;
 }
 
 export const UserModel = getModelForClass(User);
