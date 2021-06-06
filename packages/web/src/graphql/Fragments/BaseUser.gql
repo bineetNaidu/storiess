@@ -1,0 +1,7 @@
+fragment BaseUser on User {
+  _id
+  email
+  username
+  avatar
+  bio
+}

@@ -12,7 +12,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
+
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -28,7 +31,17 @@ export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
   info: Scalars['String'];
-  users: Array<User>;
+  stories: Array<User>;
+  me?: Maybe<User>;
+};
+
+export type Story = {
+  __typename?: 'Story';
+  _id: Scalars['String'];
+  image_url: Scalars['String'];
+  filename: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  deleteAt: Scalars['DateTime'];
 };
 
 export type User = {
@@ -38,6 +51,7 @@ export type User = {
   avatar?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
   username: Scalars['String'];
+  stories: Array<Story>;
 };
 
 export type UserInput = {
@@ -46,6 +60,16 @@ export type UserInput = {
   googleId: Scalars['String'];
   avatar: Scalars['String'];
 };
+
+export type BaseStoryFragment = (
+  { __typename?: 'Story' }
+  & Pick<Story, '_id' | 'image_url' | 'filename' | 'createdAt' | 'deleteAt'>
+);
+
+export type BaseUserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, '_id' | 'email' | 'username' | 'avatar' | 'bio'>
+);
 
 export type LoginMutationVariables = Exact<{
   input: UserInput;
@@ -60,7 +84,54 @@ export type LoginMutation = (
   ) }
 );
 
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & { stories: Array<(
+      { __typename?: 'Story' }
+      & BaseStoryFragment
+    )> }
+    & BaseUserFragment
+  )> }
+);
+
+export type StoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StoriesQuery = (
+  { __typename?: 'Query' }
+  & { stories: Array<(
+    { __typename?: 'User' }
+    & Pick<User, '_id' | 'email' | 'username' | 'avatar'>
+    & { stories: Array<(
+      { __typename?: 'Story' }
+      & BaseStoryFragment
+    )> }
+  )> }
+);
+
+export const BaseStoryFragmentDoc = gql`
+    fragment BaseStory on Story {
+  _id
+  image_url
+  filename
+  createdAt
+  deleteAt
+}
+    `;
+export const BaseUserFragmentDoc = gql`
+    fragment BaseUser on User {
+  _id
+  email
+  username
+  avatar
+  bio
+}
+    `;
 export const LoginDocument = gql`
     mutation Login($input: UserInput!) {
   login(input: $input) {
@@ -98,3 +169,81 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const MeDocument = gql`
+    query Me {
+  me {
+    ...BaseUser
+    stories {
+      ...BaseStory
+    }
+  }
+}
+    ${BaseUserFragmentDoc}
+${BaseStoryFragmentDoc}`;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const StoriesDocument = gql`
+    query Stories {
+  stories {
+    _id
+    email
+    username
+    avatar
+    stories {
+      ...BaseStory
+    }
+  }
+}
+    ${BaseStoryFragmentDoc}`;
+
+/**
+ * __useStoriesQuery__
+ *
+ * To run a query within a React component, call `useStoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStoriesQuery(baseOptions?: Apollo.QueryHookOptions<StoriesQuery, StoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StoriesQuery, StoriesQueryVariables>(StoriesDocument, options);
+      }
+export function useStoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StoriesQuery, StoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StoriesQuery, StoriesQueryVariables>(StoriesDocument, options);
+        }
+export type StoriesQueryHookResult = ReturnType<typeof useStoriesQuery>;
+export type StoriesLazyQueryHookResult = ReturnType<typeof useStoriesLazyQuery>;
+export type StoriesQueryResult = Apollo.QueryResult<StoriesQuery, StoriesQueryVariables>;

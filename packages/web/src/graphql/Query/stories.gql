@@ -1,0 +1,11 @@
+query Stories {
+  stories {
+    _id
+    email
+    username
+    avatar
+    stories {
+      ...BaseStory
+    }
+  }
+}

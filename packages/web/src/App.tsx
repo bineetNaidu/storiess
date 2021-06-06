@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 
 function App() {
   return (
-    <Box height="100%" minHeight="100vh" bgColor="#3c3f51">
+    <Box height="100%" minHeight="100vh">
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />

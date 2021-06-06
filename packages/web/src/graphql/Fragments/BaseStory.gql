@@ -1,0 +1,7 @@
+fragment BaseStory on Story {
+  _id
+  image_url
+  filename
+  createdAt
+  deleteAt
+}
