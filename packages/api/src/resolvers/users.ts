@@ -22,8 +22,13 @@ class UserInput {
   avatar: string;
 }
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
+  @Query(() => [User])
+  async stories(): Promise<User[]> {
+    return UserModel.find({});
+  }
+
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req }: MyContext): Promise<User | null> {
     return UserModel.findOne({
@@ -45,7 +50,7 @@ export class UserResolver {
       return existingUser;
     } else {
       //? else if not there then create the user
-      const newUser = await UserModel.create({ ...input });
+      const newUser = await UserModel.create({ ...input, stories: [] });
       newUser.save();
       //? add user._id to session
       req.session.userId = newUser._id;

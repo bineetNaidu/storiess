@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { Field, ObjectType } from 'type-graphql';
-import { prop as Property, getModelForClass } from '@typegoose/typegoose';
+import { prop as Property, getModelForClass, Ref } from '@typegoose/typegoose';
+import { Story } from './Story';
 
 @ObjectType()
 export class User {
@@ -25,6 +26,10 @@ export class User {
 
   @Property({ required: true })
   googleId!: string;
+
+  @Field(() => [Story])
+  @Property({ ref: Story, default: [], maxlength: 5, autopopulate: true })
+  stories: Ref<Story>[];
 }
 
 export const UserModel = getModelForClass(User);
