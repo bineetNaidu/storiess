@@ -44,6 +44,7 @@ export type UserInput = {
   username: Scalars['String'];
   email: Scalars['String'];
   googleId: Scalars['String'];
+  avatar: Scalars['String'];
 };
 
 export type LoginMutationVariables = Exact<{

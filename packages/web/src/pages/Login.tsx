@@ -10,31 +10,25 @@ const Login = () => {
   const [login] = useLoginMutation();
   const toast = useToast();
   const responseGoogle = async (res: GoogleLoginResponse) => {
-    try {
-      await login({
-        variables: {
-          input: {
-            email: res.profileObj.email,
-            googleId: res.googleId,
-            username: res.profileObj.name,
-          },
+    const { data } = await login({
+      variables: {
+        input: {
+          avatar: res.profileObj.imageUrl,
+          email: res.profileObj.email,
+          googleId: res.googleId,
+          username: res.profileObj.name.replace(' ', '_').toLowerCase(),
         },
+      },
+    });
+
+    if (data?.login) {
+      toast({
+        title: 'Successfully Logged you in',
+        description: `Welcome ${data.login.username}`,
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
       });
-    } catch (e) {
-      // alert(e.message);
-      if (
-        e.message.includes(
-          'E11000 duplicate key error collection: stories.users index: email_1 dup key:'
-        )
-      ) {
-        toast({
-          title: 'Error on Logging you in.',
-          description: 'Email is already in use.',
-          status: 'error',
-          duration: 9000,
-          isClosable: true,
-        });
-      }
     }
   };
 
