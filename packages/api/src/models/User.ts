@@ -30,6 +30,9 @@ export class User {
   @Field(() => [Story])
   @Property({ ref: Story, default: [], maxlength: 5, autopopulate: true })
   stories: Ref<Story>[];
+
+  @Property({ default: 5 })
+  storyLimit?: number;
 }
 
 export const UserModel = getModelForClass(User);

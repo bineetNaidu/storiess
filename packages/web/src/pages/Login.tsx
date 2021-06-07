@@ -4,9 +4,13 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from 'react-google-login';
+import { useHistory } from 'react-router';
+import { useStore } from 'src/lib/store';
 import { useLoginMutation } from '../generated/graphql';
 
 const Login = () => {
+  const history = useHistory();
+  const setUserId = useStore((state) => state.setUserId);
   const [login] = useLoginMutation();
   const toast = useToast();
   const responseGoogle = async (res: GoogleLoginResponse) => {
@@ -26,8 +30,12 @@ const Login = () => {
         title: 'Successfully Logged you in',
         description: `Welcome ${data.login.username}`,
         status: 'success',
-        duration: 9000,
+        duration: 2000,
         isClosable: true,
+        onCloseComplete: () => {
+          setUserId(data.login._id);
+          history.push('/');
+        },
       });
     }
   };

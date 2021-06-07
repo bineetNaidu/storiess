@@ -10,6 +10,7 @@ import { connectDb } from './configs/connectDb';
 import { UserResolver } from './resolvers/users';
 import { MyContext } from './utils/types';
 import { COOKIE_NAME, ___prod___ } from './utils/constants';
+import { StoryResolver } from './resolvers/stories';
 
 dotenv.config();
 
@@ -43,7 +44,7 @@ const bootstrap = async () => {
     const server = new ApolloServer({
       schema: await buildSchema({
         validate: false,
-        resolvers: [HelloResolver, UserResolver],
+        resolvers: [HelloResolver, UserResolver, StoryResolver],
       }),
       context: ({ req, res }): MyContext => ({ req, res }),
     });

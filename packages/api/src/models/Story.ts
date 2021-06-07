@@ -11,17 +11,26 @@ export class Story {
   @Property({ required: true })
   image_url: string;
 
+  @Property({ required: true })
+  publicId: string;
+
+  @Property({ required: true })
+  etag: string;
+
+  @Property({ required: true })
+  assetId: string;
+
   @Field()
   @Property({ required: true })
   filename: string;
 
   @Field()
   @Property({ type: Date, default: Date.now() })
-  createdAt: Date;
+  createdAt?: Date;
 
   @Field()
   @Property({ type: Date, default: Date.now() + new Date().setHours(24) })
-  deleteAt: Date;
+  deleteAt?: Date;
 }
 
 export const StoryModel = getModelForClass(Story);
