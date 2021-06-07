@@ -1,0 +1,9 @@
+mutation AddStory($image_url: String!, $filename: String!) {
+  addStory(image_url: $image_url, filename: $filename) {
+    _id
+    image_url
+    createdAt
+    filename
+    deleteAt
+  }
+}

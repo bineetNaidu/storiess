@@ -8,14 +8,18 @@ import {
   Text,
   Wrap,
   IconButton,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useStoriesQuery } from 'src/generated/graphql';
 import { Story } from '../components/Story';
+import { AddStoryModal } from '../components/AddStoryModal';
 
 export const Home = () => {
   const { data, loading } = useStoriesQuery();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Container bgColor="#3c3f51" py={5} rounded="md">
+      <AddStoryModal isOpen={isOpen} onClose={onClose} />
       <Flex mb={5} justifyContent="center" alignItems="center">
         <Input variant="outline" placeholder="@username" flex={0.4} />
 
@@ -34,6 +38,7 @@ export const Home = () => {
             fontWeight="bold"
             borderRadius="md"
             bgGradient="linear(to-r, red.500, yellow.500)"
+            onClick={onOpen}
           >
             <Flex alignItems="center">
               <AddIcon mr={1} /> Add Photo
