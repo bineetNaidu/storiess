@@ -26,7 +26,14 @@ class UserInput {
 export class UserResolver {
   @Query(() => [User])
   async stories(): Promise<User[]> {
-    return UserModel.find({});
+    const users = await UserModel.find({});
+    const stories: User[] = [];
+    users.map((u) => {
+      if (u.stories.length) {
+        stories.push(u);
+      }
+    });
+    return stories;
   }
 
   @Query(() => User, { nullable: true })

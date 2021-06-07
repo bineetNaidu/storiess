@@ -17,11 +17,11 @@ export class Story {
 
   @Field()
   @Property({ type: Date, default: Date.now() })
-  createdAt: Date;
+  createdAt?: Date;
 
   @Field()
   @Property({ type: Date, default: Date.now() + new Date().setHours(24) })
-  deleteAt: Date;
+  deleteAt?: Date;
 }
 
 export const StoryModel = getModelForClass(Story);
