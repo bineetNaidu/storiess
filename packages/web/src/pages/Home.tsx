@@ -54,15 +54,6 @@ export const Home = () => {
       ) : (
         <Wrap mt={4}>
           {data && data.stories.map((u) => <Story key={u._id} user={u} />)}
-          {data && data.stories.map((u) => <Story key={u._id} user={u} />)}
-          {data && data.stories.map((u) => <Story key={u._id} user={u} />)}
-          {data && data.stories.map((u) => <Story key={u._id} user={u} />)}
-          {data && data.stories.map((u) => <Story key={u._id} user={u} />)}
-          {data && data.stories.map((u) => <Story key={u._id} user={u} />)}
-          {data && data.stories.map((u) => <Story key={u._id} user={u} />)}
-          {data && data.stories.map((u) => <Story key={u._id} user={u} />)}
-          {data && data.stories.map((u) => <Story key={u._id} user={u} />)}
-          {data && data.stories.map((u) => <Story key={u._id} user={u} />)}
         </Wrap>
       )}
     </Container>

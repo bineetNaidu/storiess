@@ -67,10 +67,14 @@ export const AddStoryModal: FC<Props> = ({ isOpen, onClose }) => {
                       filename: original_filename,
                     },
                   },
+                  update: (cache) => {
+                    cache.evict({ fieldName: 'stories' });
+                    onClose();
+                  },
                 });
               } catch (e) {
                 toast({
-                  title: 'Not Logged In',
+                  title: 'Error',
                   description: e.message,
                   status: 'error',
                   duration: 9000,
