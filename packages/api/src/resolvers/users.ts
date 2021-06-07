@@ -24,6 +24,11 @@ class UserInput {
 
 @Resolver(User)
 export class UserResolver {
+  @Query(() => User, { nullable: true })
+  async user(@Arg('id') id: string): Promise<User | null> {
+    return UserModel.findById(id);
+  }
+
   @Query(() => [User])
   async stories(): Promise<User[]> {
     const users = await UserModel.find({}).populate('stories');

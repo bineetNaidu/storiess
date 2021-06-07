@@ -28,13 +28,18 @@ class StoryInput {
 
 @Resolver()
 export class StoryResolver {
-  @Mutation(() => Story)
+  @Mutation(() => Story, { nullable: true })
   @UseMiddleware(isLoggedIn)
   async addStory(@Arg('input') input: StoryInput, @Ctx() { req }: MyContext) {
     const user = await UserModel.findById(req.session.userId);
     if (!user) {
       throw new Error('Server Error. User Not Found!');
     }
+
+    if (user.stories.length === (user.storyLimit || 5)) {
+      return null;
+    }
+
     const story = await StoryModel.create(input);
     await story.save();
 
