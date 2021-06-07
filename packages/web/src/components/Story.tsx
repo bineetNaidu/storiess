@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { User } from '../generated/graphql';
 import { Avatar, WrapItem } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 interface Props {
   user: User;
@@ -14,6 +15,8 @@ export const Story: FC<Props> = ({ user }) => {
       animate={{ opacity: 1, transition: { delay: 0.4 } }}
     >
       <WrapItem
+        as={Link}
+        to={`/stories/${user._id}`}
         role="group"
         border="2px"
         p={0.5}
