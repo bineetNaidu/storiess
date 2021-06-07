@@ -32,12 +32,15 @@ export class StoryResolver {
   @UseMiddleware(isLoggedIn)
   async addStory(@Arg('input') input: StoryInput, @Ctx() { req }: MyContext) {
     const user = await UserModel.findById(req.session.userId);
+    if (!user) {
+      throw new Error('Server Error. User Not Found!');
+    }
     const story = await StoryModel.create(input);
     await story.save();
 
-    user?.stories.push(story._id);
+    user.stories.push(story._id);
 
-    await user?.save();
+    await user.save();
 
     return story;
   }
