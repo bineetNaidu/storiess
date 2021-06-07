@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import Swiper core and required modules
 import SwiperCore, { EffectCoverflow } from 'swiper/core';
-import { Spinner } from '@chakra-ui/react';
-import { Box, Container, Flex } from '@chakra-ui/layout';
+import { Avatar, Spinner } from '@chakra-ui/react';
+import { Box, Container, Flex, Text } from '@chakra-ui/layout';
 import { useParams, useHistory } from 'react-router-dom';
 import { useUserQuery } from '../generated/graphql';
 
@@ -36,6 +36,10 @@ export const Stories = () => {
           <Spinner />
         ) : (
           <Box>
+            <Flex alignItems="center" mb={5}>
+              <Avatar src={data?.user?.avatar!} mr={2} />
+              <Text>@{data?.user?.username}</Text>
+            </Flex>
             <Swiper
               effect={'coverflow'}
               grabCursor={true}
