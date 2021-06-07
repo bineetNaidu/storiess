@@ -20,7 +20,7 @@ export type Scalars = {
 export type Mutation = {
   __typename?: 'Mutation';
   login: User;
-  addStory: Story;
+  addStory?: Maybe<Story>;
 };
 
 
@@ -37,8 +37,14 @@ export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
   info: Scalars['String'];
+  user?: Maybe<User>;
   stories: Array<User>;
   me?: Maybe<User>;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['String'];
 };
 
 export type Story = {
@@ -92,10 +98,10 @@ export type AddStoryMutationVariables = Exact<{
 
 export type AddStoryMutation = (
   { __typename?: 'Mutation' }
-  & { addStory: (
+  & { addStory?: Maybe<(
     { __typename?: 'Story' }
     & Pick<Story, '_id' | 'image_url' | 'createdAt' | 'filename' | 'deleteAt'>
-  ) }
+  )> }
 );
 
 export type LoginMutationVariables = Exact<{
