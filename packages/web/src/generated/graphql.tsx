@@ -30,8 +30,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationAddStoryArgs = {
-  image_url: Scalars['String'];
-  filename: Scalars['String'];
+  input: StoryInput;
 };
 
 export type Query = {
@@ -49,6 +48,14 @@ export type Story = {
   filename: Scalars['String'];
   createdAt: Scalars['DateTime'];
   deleteAt: Scalars['DateTime'];
+};
+
+export type StoryInput = {
+  filename: Scalars['String'];
+  image_url: Scalars['String'];
+  etag: Scalars['String'];
+  publicId: Scalars['String'];
+  assetId: Scalars['String'];
 };
 
 export type User = {
@@ -79,8 +86,7 @@ export type BaseUserFragment = (
 );
 
 export type AddStoryMutationVariables = Exact<{
-  image_url: Scalars['String'];
-  filename: Scalars['String'];
+  input: StoryInput;
 }>;
 
 
@@ -154,8 +160,8 @@ export const BaseUserFragmentDoc = gql`
 }
     `;
 export const AddStoryDocument = gql`
-    mutation AddStory($image_url: String!, $filename: String!) {
-  addStory(image_url: $image_url, filename: $filename) {
+    mutation AddStory($input: StoryInput!) {
+  addStory(input: $input) {
     _id
     image_url
     createdAt
@@ -179,8 +185,7 @@ export type AddStoryMutationFn = Apollo.MutationFunction<AddStoryMutation, AddSt
  * @example
  * const [addStoryMutation, { data, loading, error }] = useAddStoryMutation({
  *   variables: {
- *      image_url: // value for 'image_url'
- *      filename: // value for 'filename'
+ *      input: // value for 'input'
  *   },
  * });
  */
