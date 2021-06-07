@@ -58,6 +58,7 @@ const Login = () => {
           clientId={process.env.REACT_APP_GOOGLE_CLIENT_KEY!}
           onSuccess={responseGoogle as any}
           onFailure={errorResponse}
+          isSignedIn={true}
         >
           <Box
             as="button"
