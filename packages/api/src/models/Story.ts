@@ -25,8 +25,8 @@ export class Story {
   @Property({ required: true })
   filename: string;
 
-  @Field()
-  @Property({ ref: Like })
+  @Field(() => [Like])
+  @Property({ ref: Like, default: [] })
   likes: Ref<Like>[];
 
   @Field()

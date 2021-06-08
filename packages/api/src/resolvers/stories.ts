@@ -2,6 +2,7 @@ import { isLoggedIn } from '../middlewares/isLoggedIn';
 import { Story, StoryModel } from '../models/Story';
 import { UserModel } from '../models/User';
 import { MyContext } from '../utils/types';
+import { LikeModel } from '../models/Like';
 import {
   Arg,
   Ctx,
@@ -13,7 +14,6 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
-import { LikeModel } from 'src/models/Like';
 
 @InputType()
 class StoryInput {

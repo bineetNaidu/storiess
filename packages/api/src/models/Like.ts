@@ -1,21 +1,19 @@
 import { ObjectId } from 'mongodb';
 import { Field, ObjectType } from 'type-graphql';
-import { prop as Property, getModelForClass, Ref } from '@typegoose/typegoose';
-import { Story } from './Story';
-import { User } from './User';
+import { prop as Property, getModelForClass } from '@typegoose/typegoose';
 
 @ObjectType()
 export class Like {
   @Field(() => String)
   readonly _id: ObjectId;
 
-  @Field()
-  @Property({ ref: Story })
-  storyId: Ref<Story>;
+  @Field(() => String)
+  @Property({ required: true })
+  storyId: ObjectId;
 
-  @Field()
-  @Property({ ref: User })
-  userId: Ref<User>;
+  @Field(() => String)
+  @Property({ required: true })
+  userId: ObjectId;
 
   @Field()
   @Property({ type: Date, default: Date.now() })
