@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { Field, ObjectType } from 'type-graphql';
-import { prop as Property, getModelForClass } from '@typegoose/typegoose';
+import { prop as Property, getModelForClass, Ref } from '@typegoose/typegoose';
+import { Like } from './Like';
 
 @ObjectType()
 export class Story {
@@ -23,6 +24,13 @@ export class Story {
   @Field()
   @Property({ required: true })
   filename: string;
+
+  @Field()
+  @Property({ ref: Like })
+  likes: Ref<Like>[];
+
+  @Field()
+  likeStatus?: boolean;
 
   @Field()
   @Property({ type: Date, default: Date.now() })
