@@ -10,6 +10,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import {
   useLikeStoryMutation,
   useMeQuery,
+  useRemoveLikeMutation,
   useUserQuery,
 } from '../generated/graphql';
 import { FcLike } from 'react-icons/fc';
@@ -32,6 +33,8 @@ export const Stories = () => {
   });
   const [likeStory] = useLikeStoryMutation();
   const { data: meData } = useMeQuery();
+  const [removeLike] = useRemoveLikeMutation();
+
   useEffect(() => {
     if (!loading && !data) {
       history.push('/');
@@ -96,6 +99,16 @@ export const Stories = () => {
                       p={2}
                       mx={1}
                       aria-label="total likes"
+                      onClick={async () => {
+                        await removeLike({
+                          variables: {
+                            storyId: story._id,
+                          },
+                          update: (cache) => {
+                            cache.evict({ id: 'User:' + data.user?._id });
+                          },
+                        });
+                      }}
                       icon={
                         <>
                           <Icon as={FcLike} />
