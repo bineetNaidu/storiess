@@ -3,6 +3,7 @@ query User($id: String!) {
     _id
     avatar
     username
+    bio
     stories {
       ...BaseStory
       likeStatus

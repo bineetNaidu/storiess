@@ -73,7 +73,7 @@ export type Story = {
   image_url: Scalars['String'];
   filename: Scalars['String'];
   likes: Array<Like>;
-  likeStatus: Scalars['Boolean'];
+  likeStatus?: Maybe<Scalars['Boolean']>;
   createdAt: Scalars['DateTime'];
   deleteAt: Scalars['DateTime'];
 };
@@ -194,7 +194,7 @@ export type UserQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, '_id' | 'avatar' | 'username'>
+    & Pick<User, '_id' | 'avatar' | 'username' | 'bio'>
     & { stories: Array<(
       { __typename?: 'Story' }
       & Pick<Story, 'likeStatus'>
@@ -441,6 +441,7 @@ export const UserDocument = gql`
     _id
     avatar
     username
+    bio
     stories {
       ...BaseStory
       likeStatus
