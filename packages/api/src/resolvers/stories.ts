@@ -38,10 +38,39 @@ export class StoryResolver {
   ): Promise<boolean | null> {
     if (!req.session.userId) return null;
     const like = await LikeModel.findOne({
-      userId: req.session.userId as string,
+      userId: req.session.userId,
       storyId: story._id,
     });
     return !!like;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isLoggedIn)
+  async removeLike(
+    @Arg('storyId', () => String) storyId: string,
+    @Ctx() { req }: MyContext
+  ): Promise<boolean> {
+    try {
+      const story = await StoryModel.findById(storyId);
+      if (!story) {
+        throw new Error('Story Was not found');
+      }
+      const like = await LikeModel.findOne({
+        storyId,
+        userId: req.session.userId!,
+      });
+      if (!like) {
+        throw new Error('The User has not liked/Reacted to this story');
+      }
+      await story.update({
+        $pull: { likes: like._id },
+      });
+      await story.save();
+      await like.remove();
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   @Mutation(() => Boolean)
