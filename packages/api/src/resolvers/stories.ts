@@ -6,11 +6,14 @@ import {
   Arg,
   Ctx,
   Field,
+  FieldResolver,
   InputType,
   Mutation,
   Resolver,
+  Root,
   UseMiddleware,
 } from 'type-graphql';
+import { LikeModel } from 'src/models/Like';
 
 @InputType()
 class StoryInput {
@@ -26,8 +29,46 @@ class StoryInput {
   assetId: string;
 }
 
-@Resolver()
+@Resolver(Story)
 export class StoryResolver {
+  @FieldResolver(() => Boolean, { nullable: true })
+  async likeStatus(
+    @Root() story: Story,
+    @Ctx() { req }: MyContext
+  ): Promise<boolean | null> {
+    if (!req.session.userId) return null;
+    const like = await LikeModel.findOne({
+      userId: req.session.userId as string,
+      storyId: story._id,
+    });
+    return !!like;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isLoggedIn)
+  async likeStory(
+    @Arg('storyId', () => String) storyId: string,
+    @Ctx() { req }: MyContext
+  ): Promise<boolean> {
+    try {
+      const story = await StoryModel.findById(storyId);
+      if (!story) {
+        throw new Error('Story Was not found');
+      }
+      const like = await LikeModel.create({
+        storyId,
+        userId: req.session.userId!,
+      });
+      await like.save();
+
+      story.likes.push(like._id);
+      await story.save();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   @Mutation(() => Story, { nullable: true })
   @UseMiddleware(isLoggedIn)
   async addStory(@Arg('input') input: StoryInput, @Ctx() { req }: MyContext) {
@@ -40,7 +81,7 @@ export class StoryResolver {
       return null;
     }
 
-    const story = await StoryModel.create(input);
+    const story = await StoryModel.create({ ...input, likes: [] });
     await story.save();
 
     user.stories.push(story._id);

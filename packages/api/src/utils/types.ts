@@ -4,8 +4,7 @@ import { ObjectID } from 'mongodb';
 
 export type MyContext = {
   req: Request & {
-    session: Session &
-      Partial<SessionData> & { userId?: string | number | ObjectID };
+    session: Session & Partial<SessionData> & { userId?: string | ObjectID };
   };
   res: Response;
 };
