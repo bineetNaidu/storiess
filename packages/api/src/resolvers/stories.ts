@@ -55,6 +55,13 @@ export class StoryResolver {
       if (!story) {
         throw new Error('Story Was not found');
       }
+      const likeExist = await LikeModel.findOne({
+        storyId,
+        userId: req.session.userId!,
+      });
+      if (likeExist) {
+        throw new Error('User has Already Liked/Reacted to this story');
+      }
       const like = await LikeModel.create({
         storyId,
         userId: req.session.userId!,
