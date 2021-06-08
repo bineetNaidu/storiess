@@ -29,7 +29,7 @@ export class Story {
   @Property({ ref: Like, default: [] })
   likes: Ref<Like>[];
 
-  @Field()
+  @Field({ nullable: true })
   likeStatus?: boolean;
 
   @Field()

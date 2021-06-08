@@ -7,13 +7,13 @@ export class Like {
   @Field(() => String)
   readonly _id: ObjectId;
 
-  @Field(() => String)
+  @Field()
   @Property({ required: true })
-  storyId: ObjectId;
+  storyId: string;
 
-  @Field(() => String)
+  @Field()
   @Property({ required: true })
-  userId: ObjectId;
+  userId: string;
 
   @Field()
   @Property({ type: Date, default: Date.now() })

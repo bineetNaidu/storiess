@@ -33,13 +33,13 @@ class StoryInput {
 export class StoryResolver {
   @FieldResolver(() => Boolean, { nullable: true })
   async likeStatus(
-    @Root() story: Story,
+    @Root() root: any,
     @Ctx() { req }: MyContext
   ): Promise<boolean | null> {
     if (!req.session.userId) return null;
     const like = await LikeModel.findOne({
       userId: req.session.userId,
-      storyId: story._id,
+      storyId: root._doc._id,
     });
     return !!like;
   }
