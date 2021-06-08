@@ -1,14 +1,13 @@
 import { Container, Spinner, Text, Wrap } from '@chakra-ui/react';
-import { useMeQuery, useStoriesQuery } from 'src/generated/graphql';
+import { useStoriesQuery } from 'src/generated/graphql';
 import { Story } from '../components/Story';
 import { Header } from '../components/Header';
 
 export const Home = () => {
   const { data, loading } = useStoriesQuery();
-  const { data: meData } = useMeQuery();
   return (
     <Container bgColor="#3c3f51" py={5} rounded="md">
-      <Header meData={meData} />
+      <Header />
       <Text fontSize="2xl" fontWeight="bold">
         Stories
       </Text>

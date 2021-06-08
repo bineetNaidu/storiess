@@ -1,20 +1,23 @@
-import { useEffect, useState } from 'react';
-// Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
-// import Swiper core and required modules
-import SwiperCore, { EffectCoverflow, Autoplay } from 'swiper/core';
-import { Avatar, Spinner, IconButton } from '@chakra-ui/react';
-import { Box, Container, Flex, Text } from '@chakra-ui/layout';
-import { useParams, useHistory } from 'react-router-dom';
-import { useUserQuery } from '../generated/graphql';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import SwiperCore, { EffectCoverflow, Autoplay } from 'swiper/core';
+import { useEffect, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Avatar, Spinner, IconButton } from '@chakra-ui/react';
+import { Box, Container, Flex, Text } from '@chakra-ui/layout';
+import { CloseIcon, Icon, EditIcon } from '@chakra-ui/icons';
+import { useParams, useHistory } from 'react-router-dom';
+import {
+  useLikeStoryMutation,
+  useMeQuery,
+  useUserQuery,
+} from '../generated/graphql';
+import { FcLike } from 'react-icons/fc';
+import { HiShare } from 'react-icons/hi';
+import { BsBookmarks } from 'react-icons/bs';
 
-// Import Swiper styles
 import 'swiper/swiper.min.css';
 import 'swiper/components/effect-coverflow/effect-coverflow.min.css';
-import { CloseIcon } from '@chakra-ui/icons';
-// import 'swiper/components/pagination/pagination.min.css';
 
 // install Swiper modules
 SwiperCore.use([EffectCoverflow, Autoplay]);
@@ -27,7 +30,8 @@ export const Stories = () => {
   const { loading, data } = useUserQuery({
     variables: { id: userId },
   });
-
+  const [likeStory] = useLikeStoryMutation();
+  const { data: meData } = useMeQuery();
   useEffect(() => {
     if (!loading && !data) {
       history.push('/');
@@ -70,16 +74,57 @@ export const Stories = () => {
               }}
             >
               {data?.user?.stories.map((story) => (
-                <>
-                  <SwiperSlide key={story._id}>
-                    <img
-                      style={{ margin: '0 auto' }}
-                      src={story.image_url.replace('/upload', '/upload/h_500')}
-                      alt={story.filename}
-                      onFocus={() => setTime(story.createdAt)}
+                <SwiperSlide key={story._id}>
+                  <img
+                    style={{ margin: '0 auto' }}
+                    src={story.image_url.replace('/upload', '/upload/h_500')}
+                    alt={story.filename}
+                    onFocus={() => setTime(story.createdAt)}
+                    onDoubleClick={async () => {
+                      await likeStory({
+                        variables: {
+                          storyId: story._id,
+                        },
+                        update: (cache) => {
+                          cache.evict({ id: 'User:' + data.user?._id });
+                        },
+                      });
+                    }}
+                  />
+                  <Box mt={3}>
+                    <IconButton
+                      p={2}
+                      mx={1}
+                      aria-label="total likes"
+                      icon={
+                        <>
+                          <Icon as={FcLike} />
+                          <Text ml={1}>{story.likes.length}</Text>
+                        </>
+                      }
                     />
-                  </SwiperSlide>
-                </>
+                    <IconButton
+                      p={2}
+                      mx={1}
+                      aria-label="share"
+                      icon={<Icon as={HiShare} />}
+                    />
+                    <IconButton
+                      p={2}
+                      mx={1}
+                      aria-label="bookmark"
+                      icon={<Icon as={BsBookmarks} />}
+                    />
+                    {meData?.me && meData.me._id === data.user?._id ? (
+                      <IconButton
+                        p={2}
+                        mx={1}
+                        aria-label="Edit Story button"
+                        icon={<EditIcon />}
+                      />
+                    ) : null}
+                  </Box>
+                </SwiperSlide>
               ))}
             </Swiper>
           </Box>

@@ -2,13 +2,8 @@ import { FC } from 'react';
 import { AddIcon, BellIcon, ChatIcon } from '@chakra-ui/icons';
 import { AddStoryModal } from './AddStoryModal';
 import { Input, Flex, IconButton, Box, useDisclosure } from '@chakra-ui/react';
-import { MeQuery } from '../generated/graphql';
 
-interface Props {
-  meData: MeQuery | undefined;
-}
-
-export const Header: FC<Props> = ({ meData }) => {
+export const Header: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Flex mb={5} justifyContent="center" alignItems="center">
@@ -29,7 +24,6 @@ export const Header: FC<Props> = ({ meData }) => {
           color="white"
           fontWeight="bold"
           borderRadius="md"
-          disabled={!!meData?.me}
           bgGradient="linear(to-r, red.500, yellow.500)"
           onClick={onOpen}
         >

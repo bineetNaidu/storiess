@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 interface Props {
-  user: User;
+  user: User | any;
 }
 
 export const Story: FC<Props> = ({ user }) => {
