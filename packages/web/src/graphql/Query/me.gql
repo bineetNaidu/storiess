@@ -1,8 +1,5 @@
 query Me {
   me {
     ...BaseUser
-    stories {
-      ...BaseStory
-    }
   }
 }

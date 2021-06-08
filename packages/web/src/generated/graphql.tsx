@@ -99,11 +99,7 @@ export type UserInput = {
 
 export type BaseStoryFragment = (
   { __typename?: 'Story' }
-  & Pick<Story, '_id' | 'image_url' | 'filename' | 'createdAt' | 'deleteAt' | 'likeStatus'>
-  & { likes: Array<(
-    { __typename?: 'Like' }
-    & Pick<Like, '_id'>
-  )> }
+  & Pick<Story, '_id' | 'image_url' | 'filename' | 'createdAt' | 'deleteAt'>
 );
 
 export type BaseUserFragment = (
@@ -154,10 +150,6 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & { stories: Array<(
-      { __typename?: 'Story' }
-      & BaseStoryFragment
-    )> }
     & BaseUserFragment
   )> }
 );
@@ -189,6 +181,11 @@ export type UserQuery = (
     & Pick<User, '_id' | 'avatar' | 'username'>
     & { stories: Array<(
       { __typename?: 'Story' }
+      & Pick<Story, 'likeStatus'>
+      & { likes: Array<(
+        { __typename?: 'Like' }
+        & Pick<Like, '_id'>
+      )> }
       & BaseStoryFragment
     )> }
   )> }
@@ -201,10 +198,6 @@ export const BaseStoryFragmentDoc = gql`
   filename
   createdAt
   deleteAt
-  likeStatus
-  likes {
-    _id
-  }
 }
     `;
 export const BaseUserFragmentDoc = gql`
@@ -325,13 +318,9 @@ export const MeDocument = gql`
     query Me {
   me {
     ...BaseUser
-    stories {
-      ...BaseStory
-    }
   }
 }
-    ${BaseUserFragmentDoc}
-${BaseStoryFragmentDoc}`;
+    ${BaseUserFragmentDoc}`;
 
 /**
  * __useMeQuery__
@@ -407,6 +396,10 @@ export const UserDocument = gql`
     username
     stories {
       ...BaseStory
+      likeStatus
+      likes {
+        _id
+      }
     }
   }
 }

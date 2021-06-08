@@ -5,6 +5,10 @@ query User($id: String!) {
     username
     stories {
       ...BaseStory
+      likeStatus
+      likes {
+        _id
+      }
     }
   }
 }

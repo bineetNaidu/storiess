@@ -43,9 +43,7 @@ export class UserResolver {
 
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req }: MyContext): Promise<User | null> {
-    return UserModel.findOne({
-      _id: req.session.userId as string,
-    });
+    return UserModel.findById(req.session.userId).populate('stories');
   }
 
   @Mutation(() => User)
