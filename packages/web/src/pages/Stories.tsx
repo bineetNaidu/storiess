@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Avatar, Spinner, IconButton, useToast } from '@chakra-ui/react';
 import { Box, Container, Flex, Text } from '@chakra-ui/layout';
 import { CloseIcon, Icon, EditIcon } from '@chakra-ui/icons';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import {
   useLikeStoryMutation,
   useMeQuery,
@@ -51,7 +51,9 @@ export const Stories = () => {
           <Box position="relative">
             <Flex alignItems="center" mb={5}>
               <Avatar src={data?.user?.avatar!} mr={2} />
-              <Text mr={2}>@{data?.user?.username}</Text>
+              <Text as={Link} to={`/u/${data?.user?._id}`} mr={2}>
+                @{data?.user?.username}
+              </Text>
               <Text color="gray">{dayjs(time).fromNow()}</Text>
 
               <IconButton

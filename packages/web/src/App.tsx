@@ -3,6 +3,7 @@ import { Home } from './pages/Home';
 import { PrivateRoute } from './components/PrivateRoute';
 import Login from './pages/Login';
 import { Stories } from './pages/Stories';
+import { Profile } from './pages/Profile';
 import { Route, Switch } from 'react-router-dom';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <Switch>
         <PrivateRoute exact path="/" component={Home} />
         <PrivateRoute exact path="/stories/:userId" component={Stories} />
+        <PrivateRoute exact path="/u/:userId" component={Profile} />
         <Route exact path="/login" component={Login} />
       </Switch>
     </Box>
