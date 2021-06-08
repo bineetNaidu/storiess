@@ -4,4 +4,8 @@ fragment BaseStory on Story {
   filename
   createdAt
   deleteAt
+  likeStatus
+  likes {
+    _id
+  }
 }
