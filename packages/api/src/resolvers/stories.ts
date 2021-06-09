@@ -1,6 +1,5 @@
 import { isLoggedIn } from '../middlewares/isLoggedIn';
 import { Story, StoryModel } from '../models/Story';
-import { UserModel } from '../models/User';
 import { MyContext } from '../utils/types';
 import { LikeModel } from '../models/Like';
 import {
@@ -13,6 +12,7 @@ import {
   Resolver,
   Root,
   UseMiddleware,
+  Query,
 } from 'type-graphql';
 
 @InputType()
@@ -42,6 +42,16 @@ export class StoryResolver {
       storyId: root._doc._id,
     });
     return !!like;
+  }
+
+  @Query(() => Story, { nullable: true })
+  async story(@Arg('storyId') storyId: string): Promise<Story | null> {
+    return StoryModel.findById(storyId).populate('user');
+  }
+
+  @Query(() => [Story])
+  async stories(): Promise<Story[]> {
+    return StoryModel.find({}).populate('user');
   }
 
   @Mutation(() => Boolean)
@@ -143,21 +153,18 @@ export class StoryResolver {
   @Mutation(() => Story, { nullable: true })
   @UseMiddleware(isLoggedIn)
   async addStory(@Arg('input') input: StoryInput, @Ctx() { req }: MyContext) {
-    const user = await UserModel.findById(req.session.userId);
-    if (!user) {
-      throw new Error('Server Error. User Not Found!');
-    }
+    // ! Add Limitation to add Story
+    // if (user.stories.length === (user.storyLimit || 5)) {
+    //   return null;
+    // }
 
-    if (user.stories.length === (user.storyLimit || 5)) {
-      return null;
-    }
-
-    const story = await StoryModel.create({ ...input, likes: [], watched: [] });
+    const story = await StoryModel.create({
+      ...input,
+      likes: [],
+      watched: [],
+      user: req.session.userId as string,
+    });
     await story.save();
-
-    user.stories.push(story._id);
-
-    await user.save();
 
     return story;
   }

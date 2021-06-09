@@ -7,6 +7,7 @@ import {
   post,
 } from '@typegoose/typegoose';
 import { Like, LikeModel } from './Like';
+import { User } from './User';
 
 @post<Story>('findOneAndDelete', async (story) => {
   if (story) {
@@ -43,6 +44,10 @@ export class Story {
   @Property({ ref: Like, default: [] })
   likes: Ref<Like>[];
 
+  @Field(() => User)
+  @Property({ ref: 'User', required: true })
+  user: Ref<User>;
+
   @Field({ nullable: true })
   likeStatus?: boolean;
 
@@ -54,8 +59,7 @@ export class Story {
   @Property({ type: Date, default: Date.now() })
   createdAt?: Date;
 
-  @Field()
-  @Property({ type: Date, default: Date.now() + new Date().setHours(24) })
+  @Property({ type: Date, default: new Date(new Date().setHours(24)) })
   deleteAt?: Date;
 }
 
