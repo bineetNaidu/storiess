@@ -7,8 +7,10 @@ import {
   Mutation,
   Query,
   Resolver,
+  UseMiddleware,
 } from 'type-graphql';
 import { MyContext } from 'src/utils/types';
+import { isLoggedIn } from 'src/middlewares/isLoggedIn';
 
 @InputType()
 class UserInput {
@@ -24,6 +26,17 @@ class UserInput {
 
 @Resolver(User)
 export class UserResolver {
+  @Mutation(() => User)
+  @UseMiddleware(isLoggedIn)
+  async updateUser(
+    @Arg('bio') bio: string,
+    @Ctx() { req }: MyContext
+  ): Promise<User> {
+    const user = await UserModel.findByIdAndUpdate(req.session.userId, { bio });
+    if (!user) throw new Error('User Not Found');
+    return user;
+  }
+
   @Query(() => User, { nullable: true })
   async user(@Arg('id') id: string): Promise<User | null> {
     return UserModel.findById(id);
