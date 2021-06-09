@@ -12,6 +12,7 @@ import {
   Resolver,
   Root,
   UseMiddleware,
+  Query,
 } from 'type-graphql';
 
 @InputType()
@@ -41,6 +42,16 @@ export class StoryResolver {
       storyId: root._doc._id,
     });
     return !!like;
+  }
+
+  @Query(() => Story, { nullable: true })
+  async story(@Arg('storyId') storyId: string): Promise<Story | null> {
+    return StoryModel.findById(storyId).populate('user');
+  }
+
+  @Query(() => [Story])
+  async stories(): Promise<Story[]> {
+    return StoryModel.find({}).populate('user');
   }
 
   @Mutation(() => Boolean)
