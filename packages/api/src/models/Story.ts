@@ -44,8 +44,8 @@ export class Story {
   @Property({ ref: Like, default: [] })
   likes: Ref<Like>[];
 
-  @Field(() => Like)
-  @Property({ ref: User, required: true })
+  @Field(() => User)
+  @Property({ ref: 'User', required: true })
   user: Ref<User>;
 
   @Field({ nullable: true })
@@ -59,8 +59,7 @@ export class Story {
   @Property({ type: Date, default: Date.now() })
   createdAt?: Date;
 
-  @Field()
-  @Property({ type: Date, default: Date.now() + new Date().setHours(24) })
+  @Property({ type: Date, default: new Date(new Date().setHours(24)) })
   deleteAt?: Date;
 }
 

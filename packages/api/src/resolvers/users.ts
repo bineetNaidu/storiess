@@ -9,9 +9,9 @@ import {
   Resolver,
   UseMiddleware,
 } from 'type-graphql';
-import { MyContext } from 'src/utils/types';
-import { isLoggedIn } from 'src/middlewares/isLoggedIn';
-import { COOKIE_NAME } from 'src/utils/constants';
+import { MyContext } from '../utils/types';
+import { isLoggedIn } from '../middlewares/isLoggedIn';
+import { COOKIE_NAME } from '../utils/constants';
 
 @InputType()
 class UserInput {
