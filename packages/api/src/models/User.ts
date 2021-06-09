@@ -3,20 +3,19 @@ import { Field, ObjectType } from 'type-graphql';
 import {
   prop as Property,
   getModelForClass,
-  Ref,
-  post,
+  // post
 } from '@typegoose/typegoose';
-import { Story, StoryModel } from './Story';
+// import { StoryModel } from './Story';
 
-@post<User>('findOneAndDelete', async (user) => {
-  if (user) {
-    await StoryModel.deleteMany({
-      _id: {
-        $in: user.stories as any,
-      },
-    });
-  }
-})
+// @post<User>('findOneAndDelete', async (user) => {
+//   if (user) {
+//     await StoryModel.deleteMany({
+//       _id: {
+//         $in: user.stories as any,
+//       },
+//     });
+//   }
+// })
 @ObjectType()
 export class User {
   @Field(() => String)
@@ -26,9 +25,9 @@ export class User {
   @Property({ required: true, unique: true })
   email: string;
 
-  @Field({ nullable: true })
+  @Field()
   @Property()
-  avatar?: string;
+  avatar: string;
 
   @Field({ nullable: true })
   @Property()
@@ -38,12 +37,8 @@ export class User {
   @Property({ required: true, unique: true, trim: true })
   username!: string;
 
-  @Property({ required: true })
+  @Property({ required: true, unique: true })
   googleId!: string;
-
-  @Field(() => [Story])
-  @Property({ ref: Story, default: [], maxlength: 5, autopopulate: true })
-  stories: Ref<Story>[];
 
   @Property({ default: 5 })
   storyLimit?: number;
