@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Avatar, Spinner, IconButton, useToast } from '@chakra-ui/react';
 import { Box, Container, Flex, Text } from '@chakra-ui/layout';
-import { CloseIcon, Icon, EditIcon } from '@chakra-ui/icons';
+import { CloseIcon, Icon, EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { InView } from 'react-intersection-observer';
 import {
@@ -17,7 +17,6 @@ import {
 } from '../generated/graphql';
 import { FcLike } from 'react-icons/fc';
 import { HiShare } from 'react-icons/hi';
-import { BsBookmarks } from 'react-icons/bs';
 
 import 'swiper/swiper.min.css';
 import 'swiper/components/effect-coverflow/effect-coverflow.min.css';
@@ -38,7 +37,6 @@ export const Stories = () => {
   const { data: meData } = useMeQuery();
   const [removeLike] = useRemoveLikeMutation();
   const [watched] = useWatchedMutation();
-
   useEffect(() => {
     if (!loading && !data) {
       history.push('/');
@@ -87,7 +85,10 @@ export const Stories = () => {
                   <InView
                     as="div"
                     onChange={async (inView, entry) => {
-                      if (inView && meData?.me?._id === data.user?._id) {
+                      if (inView) {
+                        setTime(story.createdAt);
+                      }
+                      if (inView && meData?.me?._id !== data.user?._id) {
                         await watched({ variables: { storyId: story._id } });
                       }
                     }}
@@ -172,7 +173,7 @@ export const Stories = () => {
                           aria-label="bookmark"
                           icon={
                             <>
-                              <Icon as={BsBookmarks} />
+                              <ViewIcon />
                               <Text ml={1}>{story.watched.length}</Text>
                             </>
                           }
