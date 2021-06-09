@@ -46,6 +46,25 @@ export class StoryResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(isLoggedIn)
+  async watched(
+    @Arg('storyId', () => String) storyId: string,
+    @Ctx() { req }: MyContext
+  ) {
+    try {
+      const story = await StoryModel.findById(storyId);
+      if (!story) {
+        throw new Error('Story Was not found');
+      }
+      story.watched?.push(req.session.userId!);
+      await story.save();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isLoggedIn)
   async removeLike(
     @Arg('storyId', () => String) storyId: string,
     @Ctx() { req }: MyContext
@@ -117,7 +136,7 @@ export class StoryResolver {
       return null;
     }
 
-    const story = await StoryModel.create({ ...input, likes: [] });
+    const story = await StoryModel.create({ ...input, likes: [], watched: [] });
     await story.save();
 
     user.stories.push(story._id);

@@ -32,6 +32,10 @@ export class Story {
   @Field({ nullable: true })
   likeStatus?: boolean;
 
+  @Field(() => [String])
+  @Property({ type: Array, default: [] })
+  watched?: string[];
+
   @Field()
   @Property({ type: Date, default: Date.now() })
   createdAt?: Date;
