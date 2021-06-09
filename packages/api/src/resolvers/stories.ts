@@ -46,6 +46,19 @@ export class StoryResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(isLoggedIn)
+  async removeStory(
+    @Arg('storyId', () => String) storyId: string
+  ): Promise<boolean> {
+    try {
+      await StoryModel.findByIdAndDelete(storyId);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isLoggedIn)
   async watched(
     @Arg('storyId', () => String) storyId: string,
     @Ctx() { req }: MyContext
