@@ -77,7 +77,11 @@ export const Stories = () => {
                       onChange={async (inView, entry) => {
                         if (
                           inView &&
-                          meData?.me?._id !== data?.story?.user?._id
+                          meData &&
+                          data &&
+                          data.story &&
+                          meData.me &&
+                          meData.me._id !== data.story.user._id
                         ) {
                           await watched({
                             variables: { storyId: data!.story!._id },
