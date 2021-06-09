@@ -26,24 +26,12 @@ class UserInput {
 export class UserResolver {
   @Query(() => User, { nullable: true })
   async user(@Arg('id') id: string): Promise<User | null> {
-    return UserModel.findById(id).populate('stories');
-  }
-
-  @Query(() => [User])
-  async stories(): Promise<User[]> {
-    const users = await UserModel.find({}).populate('stories');
-    const stories: User[] = [];
-    users.map((u) => {
-      if (u.stories.length) {
-        stories.push(u);
-      }
-    });
-    return stories;
+    return UserModel.findById(id);
   }
 
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req }: MyContext): Promise<User | null> {
-    return UserModel.findById(req.session.userId).populate('stories');
+    return UserModel.findById(req.session.userId);
   }
 
   @Mutation(() => User)
@@ -56,14 +44,14 @@ export class UserResolver {
     //? if there then return the existing user
     if (existingUser) {
       //? add user._id to session
-      req.session.userId = existingUser._id;
+      req.session.userId = existingUser._id as unknown as string;
       return existingUser;
     } else {
       //? else if not there then create the user
-      const newUser = await UserModel.create({ ...input, stories: [] });
+      const newUser = await UserModel.create(input);
       newUser.save();
       //? add user._id to session
-      req.session.userId = newUser._id;
+      req.session.userId = newUser._id as unknown as string;
       return newUser;
     }
   }

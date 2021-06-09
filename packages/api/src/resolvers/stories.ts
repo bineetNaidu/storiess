@@ -1,6 +1,5 @@
 import { isLoggedIn } from '../middlewares/isLoggedIn';
 import { Story, StoryModel } from '../models/Story';
-import { UserModel } from '../models/User';
 import { MyContext } from '../utils/types';
 import { LikeModel } from '../models/Like';
 import {
@@ -143,21 +142,18 @@ export class StoryResolver {
   @Mutation(() => Story, { nullable: true })
   @UseMiddleware(isLoggedIn)
   async addStory(@Arg('input') input: StoryInput, @Ctx() { req }: MyContext) {
-    const user = await UserModel.findById(req.session.userId);
-    if (!user) {
-      throw new Error('Server Error. User Not Found!');
-    }
+    // ! Add Limitation to add Story
+    // if (user.stories.length === (user.storyLimit || 5)) {
+    //   return null;
+    // }
 
-    if (user.stories.length === (user.storyLimit || 5)) {
-      return null;
-    }
-
-    const story = await StoryModel.create({ ...input, likes: [], watched: [] });
+    const story = await StoryModel.create({
+      ...input,
+      likes: [],
+      watched: [],
+      user: req.session.userId as string,
+    });
     await story.save();
-
-    user.stories.push(story._id);
-
-    await user.save();
 
     return story;
   }
