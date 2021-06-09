@@ -28,6 +28,7 @@ export type Like = {
 export type Mutation = {
   __typename?: 'Mutation';
   login: User;
+  watched: Scalars['Boolean'];
   removeLike: Scalars['Boolean'];
   likeStory: Scalars['Boolean'];
   addStory?: Maybe<Story>;
@@ -36,6 +37,11 @@ export type Mutation = {
 
 export type MutationLoginArgs = {
   input: UserInput;
+};
+
+
+export type MutationWatchedArgs = {
+  storyId: Scalars['String'];
 };
 
 
@@ -74,6 +80,7 @@ export type Story = {
   filename: Scalars['String'];
   likes: Array<Like>;
   likeStatus?: Maybe<Scalars['Boolean']>;
+  watched: Array<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   deleteAt: Scalars['DateTime'];
 };
@@ -159,6 +166,16 @@ export type RemoveLikeMutation = (
   & Pick<Mutation, 'removeLike'>
 );
 
+export type WatchedMutationVariables = Exact<{
+  storyId: Scalars['String'];
+}>;
+
+
+export type WatchedMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'watched'>
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -197,7 +214,7 @@ export type UserQuery = (
     & Pick<User, '_id' | 'avatar' | 'username' | 'bio'>
     & { stories: Array<(
       { __typename?: 'Story' }
-      & Pick<Story, 'likeStatus'>
+      & Pick<Story, 'watched' | 'likeStatus'>
       & { likes: Array<(
         { __typename?: 'Like' }
         & Pick<Like, '_id'>
@@ -361,6 +378,37 @@ export function useRemoveLikeMutation(baseOptions?: Apollo.MutationHookOptions<R
 export type RemoveLikeMutationHookResult = ReturnType<typeof useRemoveLikeMutation>;
 export type RemoveLikeMutationResult = Apollo.MutationResult<RemoveLikeMutation>;
 export type RemoveLikeMutationOptions = Apollo.BaseMutationOptions<RemoveLikeMutation, RemoveLikeMutationVariables>;
+export const WatchedDocument = gql`
+    mutation Watched($storyId: String!) {
+  watched(storyId: $storyId)
+}
+    `;
+export type WatchedMutationFn = Apollo.MutationFunction<WatchedMutation, WatchedMutationVariables>;
+
+/**
+ * __useWatchedMutation__
+ *
+ * To run a mutation, you first call `useWatchedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useWatchedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [watchedMutation, { data, loading, error }] = useWatchedMutation({
+ *   variables: {
+ *      storyId: // value for 'storyId'
+ *   },
+ * });
+ */
+export function useWatchedMutation(baseOptions?: Apollo.MutationHookOptions<WatchedMutation, WatchedMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<WatchedMutation, WatchedMutationVariables>(WatchedDocument, options);
+      }
+export type WatchedMutationHookResult = ReturnType<typeof useWatchedMutation>;
+export type WatchedMutationResult = Apollo.MutationResult<WatchedMutation>;
+export type WatchedMutationOptions = Apollo.BaseMutationOptions<WatchedMutation, WatchedMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -444,6 +492,7 @@ export const UserDocument = gql`
     bio
     stories {
       ...BaseStory
+      watched
       likeStatus
       likes {
         _id

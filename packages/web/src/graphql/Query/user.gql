@@ -6,6 +6,7 @@ query User($id: String!) {
     bio
     stories {
       ...BaseStory
+      watched
       likeStatus
       likes {
         _id

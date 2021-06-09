@@ -7,11 +7,13 @@ import { Avatar, Spinner, IconButton, useToast } from '@chakra-ui/react';
 import { Box, Container, Flex, Text } from '@chakra-ui/layout';
 import { CloseIcon, Icon, EditIcon } from '@chakra-ui/icons';
 import { useParams, useHistory, Link } from 'react-router-dom';
+import { InView } from 'react-intersection-observer';
 import {
   useLikeStoryMutation,
   useMeQuery,
   useRemoveLikeMutation,
   useUserQuery,
+  useWatchedMutation,
 } from '../generated/graphql';
 import { FcLike } from 'react-icons/fc';
 import { HiShare } from 'react-icons/hi';
@@ -35,6 +37,7 @@ export const Stories = () => {
   const [likeStory] = useLikeStoryMutation();
   const { data: meData } = useMeQuery();
   const [removeLike] = useRemoveLikeMutation();
+  const [watched] = useWatchedMutation();
 
   useEffect(() => {
     if (!loading && !data) {
@@ -81,38 +84,47 @@ export const Stories = () => {
             >
               {data?.user?.stories.map((story) => (
                 <SwiperSlide key={story._id}>
-                  <img
-                    style={{ margin: '0 auto' }}
-                    src={story.image_url.replace('/upload', '/upload/h_500')}
-                    alt={story.filename}
-                    onFocus={() => setTime(story.createdAt)}
-                    onDoubleClick={async () => {
-                      try {
-                        await likeStory({
-                          variables: {
-                            storyId: story._id,
-                          },
-                          update: (cache) => {
-                            cache.evict({ id: 'User:' + data.user?._id });
-                          },
-                        });
-                        toast({
-                          title: 'Like Added!',
-                          status: 'success',
-                          duration: 5000,
-                          isClosable: true,
-                        });
-                      } catch (e) {
-                        toast({
-                          title: 'Error Ocurred',
-                          description: e.message,
-                          status: 'error',
-                          duration: 5000,
-                          isClosable: true,
-                        });
+                  <InView
+                    as="div"
+                    onChange={async (inView, entry) => {
+                      if (inView && meData?.me?._id === data.user?._id) {
+                        await watched({ variables: { storyId: story._id } });
                       }
                     }}
-                  />
+                  >
+                    <img
+                      style={{ margin: '0 auto' }}
+                      src={story.image_url.replace('/upload', '/upload/h_500')}
+                      alt={story.filename}
+                      onFocus={() => setTime(story.createdAt)}
+                      onDoubleClick={async () => {
+                        try {
+                          await likeStory({
+                            variables: {
+                              storyId: story._id,
+                            },
+                            update: (cache) => {
+                              cache.evict({ id: 'User:' + data.user?._id });
+                            },
+                          });
+                          toast({
+                            title: 'Like Added!',
+                            status: 'success',
+                            duration: 5000,
+                            isClosable: true,
+                          });
+                        } catch (e) {
+                          toast({
+                            title: 'Error Ocurred',
+                            description: e.message,
+                            status: 'error',
+                            duration: 5000,
+                            isClosable: true,
+                          });
+                        }
+                      }}
+                    />
+                  </InView>
                   <Box mt={3}>
                     <IconButton
                       p={2}
@@ -152,19 +164,26 @@ export const Stories = () => {
                       aria-label="share"
                       icon={<Icon as={HiShare} />}
                     />
-                    <IconButton
-                      p={2}
-                      mx={1}
-                      aria-label="bookmark"
-                      icon={<Icon as={BsBookmarks} />}
-                    />
                     {meData?.me && meData.me._id === data.user?._id ? (
-                      <IconButton
-                        p={2}
-                        mx={1}
-                        aria-label="Edit Story button"
-                        icon={<EditIcon />}
-                      />
+                      <>
+                        <IconButton
+                          p={2}
+                          mx={1}
+                          aria-label="bookmark"
+                          icon={
+                            <>
+                              <Icon as={BsBookmarks} />
+                              <Text ml={1}>{story.watched.length}</Text>
+                            </>
+                          }
+                        />
+                        <IconButton
+                          p={2}
+                          mx={1}
+                          aria-label="Edit Story button"
+                          icon={<EditIcon />}
+                        />
+                      </>
                     ) : null}
                   </Box>
                 </SwiperSlide>
