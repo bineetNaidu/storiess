@@ -5,13 +5,14 @@ import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Avatar, Spinner, IconButton, useToast } from '@chakra-ui/react';
 import { Box, Container, Flex, Text } from '@chakra-ui/layout';
-import { CloseIcon, Icon, EditIcon, ViewIcon } from '@chakra-ui/icons';
+import { CloseIcon, Icon, DeleteIcon, ViewIcon } from '@chakra-ui/icons';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { InView } from 'react-intersection-observer';
 import {
   useLikeStoryMutation,
   useMeQuery,
   useRemoveLikeMutation,
+  useRemoveStoryMutation,
   useUserQuery,
   useWatchedMutation,
 } from '../generated/graphql';
@@ -37,6 +38,7 @@ export const Stories = () => {
   const { data: meData } = useMeQuery();
   const [removeLike] = useRemoveLikeMutation();
   const [watched] = useWatchedMutation();
+  const [removeStory] = useRemoveStoryMutation();
   useEffect(() => {
     if (!loading && !data) {
       history.push('/');
@@ -69,7 +71,7 @@ export const Stories = () => {
               grabCursor={true}
               centeredSlides={true}
               autoplay={{
-                delay: 2000,
+                delay: 9000,
               }}
               slidesPerView={'auto'}
               coverflowEffect={{
@@ -80,115 +82,128 @@ export const Stories = () => {
                 slideShadows: true,
               }}
             >
-              {data?.user?.stories.map((story) => (
-                <SwiperSlide key={story._id}>
-                  <InView
-                    as="div"
-                    onChange={async (inView, entry) => {
-                      if (inView) {
-                        setTime(story.createdAt);
-                      }
-                      if (inView && meData?.me?._id !== data.user?._id) {
-                        await watched({ variables: { storyId: story._id } });
-                      }
-                    }}
-                  >
-                    <img
-                      style={{ margin: '0 auto' }}
-                      src={story.image_url.replace('/upload', '/upload/h_500')}
-                      alt={story.filename}
-                      onFocus={() => setTime(story.createdAt)}
-                      onDoubleClick={async () => {
-                        try {
-                          await likeStory({
-                            variables: {
-                              storyId: story._id,
-                            },
-                            update: (cache) => {
-                              cache.evict({ id: 'User:' + data.user?._id });
-                            },
-                          });
-                          toast({
-                            title: 'Like Added!',
-                            status: 'success',
-                            duration: 5000,
-                            isClosable: true,
-                          });
-                        } catch (e) {
-                          toast({
-                            title: 'Error Ocurred',
-                            description: e.message,
-                            status: 'error',
-                            duration: 5000,
-                            isClosable: true,
-                          });
+              {data?.user?.stories.map((story) =>
+                !story ? null : (
+                  <SwiperSlide key={story._id}>
+                    <InView
+                      as="div"
+                      onChange={async (inView, entry) => {
+                        if (inView) {
+                          setTime(story.createdAt);
+                        }
+                        if (inView && meData?.me?._id !== data.user?._id) {
+                          await watched({ variables: { storyId: story._id } });
                         }
                       }}
-                    />
-                  </InView>
-                  <Box mt={3}>
-                    <IconButton
-                      p={2}
-                      mx={1}
-                      aria-label="total likes"
-                      bgColor={story.likeStatus ? 'red.700' : undefined}
-                      onClick={async () => {
-                        try {
-                          await removeLike({
-                            variables: {
-                              storyId: story._id,
-                            },
-                            update: (cache) => {
-                              cache.evict({ id: 'User:' + data.user?._id });
-                            },
-                          });
-                        } catch (e) {
-                          toast({
-                            title: 'Error Ocurred',
-                            description: e.message,
-                            status: 'error',
-                            duration: 5000,
-                            isClosable: true,
-                          });
-                        }
-                      }}
-                      icon={
-                        <>
-                          <Icon as={FcLike} />
-                          <Text ml={1}>{story.likes.length}</Text>
-                        </>
-                      }
-                    />
-                    <IconButton
-                      p={2}
-                      mx={1}
-                      aria-label="share"
-                      icon={<Icon as={HiShare} />}
-                    />
-                    {meData?.me && meData.me._id === data.user?._id ? (
-                      <>
-                        <IconButton
-                          p={2}
-                          mx={1}
-                          aria-label="bookmark"
-                          icon={
-                            <>
-                              <ViewIcon />
-                              <Text ml={1}>{story.watched.length}</Text>
-                            </>
+                    >
+                      <img
+                        style={{ margin: '0 auto' }}
+                        src={story.image_url.replace(
+                          '/upload',
+                          '/upload/h_500'
+                        )}
+                        alt={story.filename}
+                        onFocus={() => setTime(story.createdAt)}
+                        onDoubleClick={async () => {
+                          try {
+                            await likeStory({
+                              variables: {
+                                storyId: story._id,
+                              },
+                              update: (cache) => {
+                                cache.evict({ id: 'User:' + data.user?._id });
+                              },
+                            });
+                            toast({
+                              title: 'Like Added!',
+                              status: 'success',
+                              duration: 5000,
+                              isClosable: true,
+                            });
+                          } catch (e) {
+                            toast({
+                              title: 'Error Ocurred',
+                              description: e.message,
+                              status: 'error',
+                              duration: 5000,
+                              isClosable: true,
+                            });
                           }
-                        />
-                        <IconButton
-                          p={2}
-                          mx={1}
-                          aria-label="Edit Story button"
-                          icon={<EditIcon />}
-                        />
-                      </>
-                    ) : null}
-                  </Box>
-                </SwiperSlide>
-              ))}
+                        }}
+                      />
+                    </InView>
+                    <Box mt={3}>
+                      <IconButton
+                        p={2}
+                        mx={1}
+                        aria-label="total likes"
+                        bgColor={story.likeStatus ? 'red.700' : undefined}
+                        onClick={async () => {
+                          try {
+                            await removeLike({
+                              variables: {
+                                storyId: story._id,
+                              },
+                              update: (cache) => {
+                                cache.evict({ id: 'User:' + data.user?._id });
+                              },
+                            });
+                          } catch (e) {
+                            toast({
+                              title: 'Error Ocurred',
+                              description: e.message,
+                              status: 'error',
+                              duration: 5000,
+                              isClosable: true,
+                            });
+                          }
+                        }}
+                        icon={
+                          <>
+                            <Icon as={FcLike} />
+                            <Text ml={1}>{story.likes.length}</Text>
+                          </>
+                        }
+                      />
+                      <IconButton
+                        p={2}
+                        mx={1}
+                        aria-label="share"
+                        icon={<Icon as={HiShare} />}
+                      />
+                      {meData?.me && meData.me._id === data.user?._id ? (
+                        <>
+                          <IconButton
+                            p={2}
+                            mx={1}
+                            aria-label="bookmark"
+                            icon={
+                              <>
+                                <ViewIcon />
+                                <Text ml={1}>{story.watched.length}</Text>
+                              </>
+                            }
+                          />
+                          <IconButton
+                            p={2}
+                            mx={1}
+                            aria-label="Edit Story button"
+                            onClick={async () => {
+                              await removeStory({
+                                variables: { storyId: story._id },
+                                update: (cache) => {
+                                  cache.evict({ id: 'Story:' + story._id });
+                                },
+                              });
+                            }}
+                            icon={<DeleteIcon />}
+                          />
+                        </>
+                      ) : null}
+                    </Box>
+                  </SwiperSlide>
+                )
+              )}
             </Swiper>
           </Box>
         )}

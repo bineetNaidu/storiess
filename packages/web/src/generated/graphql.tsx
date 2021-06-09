@@ -28,6 +28,7 @@ export type Like = {
 export type Mutation = {
   __typename?: 'Mutation';
   login: User;
+  removeStory: Scalars['Boolean'];
   watched: Scalars['Boolean'];
   removeLike: Scalars['Boolean'];
   likeStory: Scalars['Boolean'];
@@ -37,6 +38,11 @@ export type Mutation = {
 
 export type MutationLoginArgs = {
   input: UserInput;
+};
+
+
+export type MutationRemoveStoryArgs = {
+  storyId: Scalars['String'];
 };
 
 
@@ -162,6 +168,16 @@ export type RemoveLikeMutationVariables = Exact<{
 
 
 export type RemoveLikeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeLike'>
+);
+
+export type RemoveStoryMutationVariables = Exact<{
+  storyId: Scalars['String'];
+}>;
+
+
+export type RemoveStoryMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'removeLike'>
 );
@@ -378,6 +394,37 @@ export function useRemoveLikeMutation(baseOptions?: Apollo.MutationHookOptions<R
 export type RemoveLikeMutationHookResult = ReturnType<typeof useRemoveLikeMutation>;
 export type RemoveLikeMutationResult = Apollo.MutationResult<RemoveLikeMutation>;
 export type RemoveLikeMutationOptions = Apollo.BaseMutationOptions<RemoveLikeMutation, RemoveLikeMutationVariables>;
+export const RemoveStoryDocument = gql`
+    mutation RemoveStory($storyId: String!) {
+  removeLike(storyId: $storyId)
+}
+    `;
+export type RemoveStoryMutationFn = Apollo.MutationFunction<RemoveStoryMutation, RemoveStoryMutationVariables>;
+
+/**
+ * __useRemoveStoryMutation__
+ *
+ * To run a mutation, you first call `useRemoveStoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveStoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeStoryMutation, { data, loading, error }] = useRemoveStoryMutation({
+ *   variables: {
+ *      storyId: // value for 'storyId'
+ *   },
+ * });
+ */
+export function useRemoveStoryMutation(baseOptions?: Apollo.MutationHookOptions<RemoveStoryMutation, RemoveStoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveStoryMutation, RemoveStoryMutationVariables>(RemoveStoryDocument, options);
+      }
+export type RemoveStoryMutationHookResult = ReturnType<typeof useRemoveStoryMutation>;
+export type RemoveStoryMutationResult = Apollo.MutationResult<RemoveStoryMutation>;
+export type RemoveStoryMutationOptions = Apollo.BaseMutationOptions<RemoveStoryMutation, RemoveStoryMutationVariables>;
 export const WatchedDocument = gql`
     mutation Watched($storyId: String!) {
   watched(storyId: $storyId)
