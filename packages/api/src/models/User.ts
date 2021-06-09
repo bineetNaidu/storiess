@@ -1,8 +1,22 @@
 import { ObjectId } from 'mongodb';
 import { Field, ObjectType } from 'type-graphql';
-import { prop as Property, getModelForClass, Ref } from '@typegoose/typegoose';
-import { Story } from './Story';
+import {
+  prop as Property,
+  getModelForClass,
+  Ref,
+  post,
+} from '@typegoose/typegoose';
+import { Story, StoryModel } from './Story';
 
+@post<User>('findOneAndDelete', async (user) => {
+  if (user) {
+    await StoryModel.deleteMany({
+      _id: {
+        $in: user.stories as any,
+      },
+    });
+  }
+})
 @ObjectType()
 export class User {
   @Field(() => String)
