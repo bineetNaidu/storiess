@@ -55,6 +55,9 @@ export class StoryResolver {
       if (!story) {
         throw new Error('Story Was not found');
       }
+      if (story.watched?.includes(req.session.userId!)) {
+        throw new Error('The User has already watched this story');
+      }
       story.watched?.push(req.session.userId!);
       await story.save();
       return true;
