@@ -181,6 +181,14 @@ export type LoginMutation = (
   ) }
 );
 
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'logout'>
+);
+
 export type RemoveLikeMutationVariables = Exact<{
   storyId: Scalars['String'];
 }>;
@@ -199,6 +207,19 @@ export type RemoveStoryMutationVariables = Exact<{
 export type RemoveStoryMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'removeStory'>
+);
+
+export type UpdateUserMutationVariables = Exact<{
+  bio: Scalars['String'];
+}>;
+
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser: (
+    { __typename?: 'User' }
+    & BaseUserFragment
+  ) }
 );
 
 export type WatchedMutationVariables = Exact<{
@@ -230,6 +251,26 @@ export type StoriesQuery = (
   & { stories: Array<(
     { __typename?: 'Story' }
     & BaseStoryFragment
+  )> }
+);
+
+export type StoryQueryVariables = Exact<{
+  storyId: Scalars['String'];
+}>;
+
+
+export type StoryQuery = (
+  { __typename?: 'Query' }
+  & { story?: Maybe<(
+    { __typename?: 'Story' }
+    & Pick<Story, '_id' | 'image_url' | 'filename' | 'likeStatus' | 'watched' | 'createdAt'>
+    & { likes: Array<(
+      { __typename?: 'Like' }
+      & Pick<Like, '_id'>
+    )>, user: (
+      { __typename?: 'User' }
+      & Pick<User, '_id' | 'avatar' | 'username'>
+    ) }
   )> }
 );
 
@@ -369,6 +410,36 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const LogoutDocument = gql`
+    mutation Logout {
+  logout
+}
+    `;
+export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
+
+/**
+ * __useLogoutMutation__
+ *
+ * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
+      }
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
+export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RemoveLikeDocument = gql`
     mutation RemoveLike($storyId: String!) {
   removeLike(storyId: $storyId)
@@ -431,6 +502,39 @@ export function useRemoveStoryMutation(baseOptions?: Apollo.MutationHookOptions<
 export type RemoveStoryMutationHookResult = ReturnType<typeof useRemoveStoryMutation>;
 export type RemoveStoryMutationResult = Apollo.MutationResult<RemoveStoryMutation>;
 export type RemoveStoryMutationOptions = Apollo.BaseMutationOptions<RemoveStoryMutation, RemoveStoryMutationVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($bio: String!) {
+  updateUser(bio: $bio) {
+    ...BaseUser
+  }
+}
+    ${BaseUserFragmentDoc}`;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      bio: // value for 'bio'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const WatchedDocument = gql`
     mutation Watched($storyId: String!) {
   watched(storyId: $storyId)
@@ -530,6 +634,54 @@ export function useStoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<St
 export type StoriesQueryHookResult = ReturnType<typeof useStoriesQuery>;
 export type StoriesLazyQueryHookResult = ReturnType<typeof useStoriesLazyQuery>;
 export type StoriesQueryResult = Apollo.QueryResult<StoriesQuery, StoriesQueryVariables>;
+export const StoryDocument = gql`
+    query Story($storyId: String!) {
+  story(storyId: $storyId) {
+    _id
+    image_url
+    filename
+    likes {
+      _id
+    }
+    user {
+      _id
+      avatar
+      username
+    }
+    likeStatus
+    watched
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useStoryQuery__
+ *
+ * To run a query within a React component, call `useStoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStoryQuery({
+ *   variables: {
+ *      storyId: // value for 'storyId'
+ *   },
+ * });
+ */
+export function useStoryQuery(baseOptions: Apollo.QueryHookOptions<StoryQuery, StoryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StoryQuery, StoryQueryVariables>(StoryDocument, options);
+      }
+export function useStoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StoryQuery, StoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StoryQuery, StoryQueryVariables>(StoryDocument, options);
+        }
+export type StoryQueryHookResult = ReturnType<typeof useStoryQuery>;
+export type StoryLazyQueryHookResult = ReturnType<typeof useStoryLazyQuery>;
+export type StoryQueryResult = Apollo.QueryResult<StoryQuery, StoryQueryVariables>;
 export const UserDocument = gql`
     query User($id: String!) {
   user(id: $id) {
