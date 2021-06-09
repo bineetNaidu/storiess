@@ -27,12 +27,19 @@ export type Like = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  logout: Scalars['Boolean'];
+  updateUser: User;
   login: User;
   removeStory: Scalars['Boolean'];
   watched: Scalars['Boolean'];
   removeLike: Scalars['Boolean'];
   likeStory: Scalars['Boolean'];
   addStory?: Maybe<Story>;
+};
+
+
+export type MutationUpdateUserArgs = {
+  bio: Scalars['String'];
 };
 
 
@@ -70,13 +77,19 @@ export type Query = {
   hello: Scalars['String'];
   info: Scalars['String'];
   user?: Maybe<User>;
-  stories: Array<User>;
   me?: Maybe<User>;
+  story?: Maybe<Story>;
+  stories: Array<Story>;
 };
 
 
 export type QueryUserArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryStoryArgs = {
+  storyId: Scalars['String'];
 };
 
 export type Story = {
@@ -85,10 +98,10 @@ export type Story = {
   image_url: Scalars['String'];
   filename: Scalars['String'];
   likes: Array<Like>;
+  user: User;
   likeStatus?: Maybe<Scalars['Boolean']>;
   watched: Array<Scalars['String']>;
   createdAt: Scalars['DateTime'];
-  deleteAt: Scalars['DateTime'];
 };
 
 export type StoryInput = {
@@ -103,10 +116,9 @@ export type User = {
   __typename?: 'User';
   _id: Scalars['String'];
   email: Scalars['String'];
-  avatar?: Maybe<Scalars['String']>;
+  avatar: Scalars['String'];
   bio?: Maybe<Scalars['String']>;
   username: Scalars['String'];
-  stories: Array<Story>;
 };
 
 export type UserInput = {
@@ -118,7 +130,14 @@ export type UserInput = {
 
 export type BaseStoryFragment = (
   { __typename?: 'Story' }
-  & Pick<Story, '_id' | 'image_url' | 'filename' | 'createdAt' | 'deleteAt'>
+  & Pick<Story, '_id' | 'image_url' | 'filename' | 'likeStatus' | 'watched' | 'createdAt'>
+  & { likes: Array<(
+    { __typename?: 'Like' }
+    & Pick<Like, '_id'>
+  )>, user: (
+    { __typename?: 'User' }
+    & Pick<User, '_id' | 'avatar'>
+  ) }
 );
 
 export type BaseUserFragment = (
@@ -135,7 +154,7 @@ export type AddStoryMutation = (
   { __typename?: 'Mutation' }
   & { addStory?: Maybe<(
     { __typename?: 'Story' }
-    & Pick<Story, '_id' | 'image_url' | 'createdAt' | 'filename' | 'deleteAt'>
+    & BaseStoryFragment
   )> }
 );
 
@@ -158,7 +177,7 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login: (
     { __typename?: 'User' }
-    & Pick<User, '_id' | 'email' | 'avatar' | 'bio' | 'username'>
+    & BaseUserFragment
   ) }
 );
 
@@ -179,7 +198,7 @@ export type RemoveStoryMutationVariables = Exact<{
 
 export type RemoveStoryMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'removeLike'>
+  & Pick<Mutation, 'removeStory'>
 );
 
 export type WatchedMutationVariables = Exact<{
@@ -209,12 +228,8 @@ export type StoriesQueryVariables = Exact<{ [key: string]: never; }>;
 export type StoriesQuery = (
   { __typename?: 'Query' }
   & { stories: Array<(
-    { __typename?: 'User' }
-    & Pick<User, '_id' | 'email' | 'username' | 'avatar'>
-    & { stories: Array<(
-      { __typename?: 'Story' }
-      & BaseStoryFragment
-    )> }
+    { __typename?: 'Story' }
+    & BaseStoryFragment
   )> }
 );
 
@@ -227,16 +242,7 @@ export type UserQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, '_id' | 'avatar' | 'username' | 'bio'>
-    & { stories: Array<(
-      { __typename?: 'Story' }
-      & Pick<Story, 'watched' | 'likeStatus'>
-      & { likes: Array<(
-        { __typename?: 'Like' }
-        & Pick<Like, '_id'>
-      )> }
-      & BaseStoryFragment
-    )> }
+    & BaseUserFragment
   )> }
 );
 
@@ -245,8 +251,16 @@ export const BaseStoryFragmentDoc = gql`
   _id
   image_url
   filename
+  likes {
+    _id
+  }
+  user {
+    _id
+    avatar
+  }
+  likeStatus
+  watched
   createdAt
-  deleteAt
 }
     `;
 export const BaseUserFragmentDoc = gql`
@@ -261,14 +275,10 @@ export const BaseUserFragmentDoc = gql`
 export const AddStoryDocument = gql`
     mutation AddStory($input: StoryInput!) {
   addStory(input: $input) {
-    _id
-    image_url
-    createdAt
-    filename
-    deleteAt
+    ...BaseStory
   }
 }
-    `;
+    ${BaseStoryFragmentDoc}`;
 export type AddStoryMutationFn = Apollo.MutationFunction<AddStoryMutation, AddStoryMutationVariables>;
 
 /**
@@ -329,14 +339,10 @@ export type LikeStoryMutationOptions = Apollo.BaseMutationOptions<LikeStoryMutat
 export const LoginDocument = gql`
     mutation Login($input: UserInput!) {
   login(input: $input) {
-    _id
-    email
-    avatar
-    bio
-    username
+    ...BaseUser
   }
 }
-    `;
+    ${BaseUserFragmentDoc}`;
 export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -396,7 +402,7 @@ export type RemoveLikeMutationResult = Apollo.MutationResult<RemoveLikeMutation>
 export type RemoveLikeMutationOptions = Apollo.BaseMutationOptions<RemoveLikeMutation, RemoveLikeMutationVariables>;
 export const RemoveStoryDocument = gql`
     mutation RemoveStory($storyId: String!) {
-  removeLike(storyId: $storyId)
+  removeStory(storyId: $storyId)
 }
     `;
 export type RemoveStoryMutationFn = Apollo.MutationFunction<RemoveStoryMutation, RemoveStoryMutationVariables>;
@@ -493,13 +499,7 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const StoriesDocument = gql`
     query Stories {
   stories {
-    _id
-    email
-    username
-    avatar
-    stories {
-      ...BaseStory
-    }
+    ...BaseStory
   }
 }
     ${BaseStoryFragmentDoc}`;
@@ -533,21 +533,10 @@ export type StoriesQueryResult = Apollo.QueryResult<StoriesQuery, StoriesQueryVa
 export const UserDocument = gql`
     query User($id: String!) {
   user(id: $id) {
-    _id
-    avatar
-    username
-    bio
-    stories {
-      ...BaseStory
-      watched
-      likeStatus
-      likes {
-        _id
-      }
-    }
+    ...BaseUser
   }
 }
-    ${BaseStoryFragmentDoc}`;
+    ${BaseUserFragmentDoc}`;
 
 /**
  * __useUserQuery__

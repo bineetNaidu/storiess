@@ -2,6 +2,14 @@ fragment BaseStory on Story {
   _id
   image_url
   filename
+  likes {
+    _id
+  }
+  user {
+    _id
+    avatar
+  }
+  likeStatus
+  watched
   createdAt
-  deleteAt
 }

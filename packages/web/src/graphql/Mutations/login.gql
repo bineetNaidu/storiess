@@ -1,9 +1,5 @@
 mutation Login($input: UserInput!) {
   login(input: $input) {
-    _id
-    email
-    avatar
-    bio
-    username
+    ...BaseUser
   }
 }

@@ -1,9 +1,5 @@
 mutation AddStory($input: StoryInput!) {
   addStory(input: $input) {
-    _id
-    image_url
-    createdAt
-    filename
-    deleteAt
+    ...BaseStory
   }
 }
