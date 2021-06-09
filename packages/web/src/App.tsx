@@ -11,7 +11,7 @@ function App() {
     <Box height="100%" minHeight="100vh">
       <Switch>
         <PrivateRoute exact path="/" component={Home} />
-        <PrivateRoute exact path="/stories/:userId" component={Stories} />
+        <PrivateRoute exact path="/stories/:storyId" component={Stories} />
         <PrivateRoute exact path="/u/:userId" component={Profile} />
         <Route exact path="/login" component={Login} />
       </Switch>

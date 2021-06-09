@@ -1,14 +1,14 @@
 import { FC } from 'react';
-import { User } from '../generated/graphql';
+import { BaseStoryFragment } from '../generated/graphql';
 import { Avatar, WrapItem } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 interface Props {
-  user: User | any;
+  story: BaseStoryFragment;
 }
 
-export const Story: FC<Props> = ({ user }) => {
+export const Story: FC<Props> = ({ story }) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -16,7 +16,7 @@ export const Story: FC<Props> = ({ user }) => {
     >
       <WrapItem
         as={Link}
-        to={`/stories/${user._id}`}
+        to={`/stories/${story._id}`}
         role="group"
         border="2px"
         p={0.5}
@@ -27,8 +27,8 @@ export const Story: FC<Props> = ({ user }) => {
       >
         <Avatar
           _groupHover={{ transform: 'scale(1.15)' }}
-          name={user.username}
-          src={user.avatar!}
+          name={story.user._id}
+          src={story.user.avatar}
           transition="all"
         />
       </WrapItem>

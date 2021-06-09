@@ -1,23 +1,19 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import SwiperCore, { EffectCoverflow, Autoplay } from 'swiper/core';
-import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Avatar, Spinner, IconButton, useToast } from '@chakra-ui/react';
 import { Box, Container, Flex, Text } from '@chakra-ui/layout';
-import { CloseIcon, Icon, DeleteIcon, ViewIcon } from '@chakra-ui/icons';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { CloseIcon } from '@chakra-ui/icons';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import { InView } from 'react-intersection-observer';
+import { StoryCTXs } from '../components/StoryCTXs';
 import {
   useLikeStoryMutation,
   useMeQuery,
-  useRemoveLikeMutation,
-  useRemoveStoryMutation,
-  useUserQuery,
+  useStoryQuery,
   useWatchedMutation,
 } from '../generated/graphql';
-import { FcLike } from 'react-icons/fc';
-import { HiShare } from 'react-icons/hi';
 
 import 'swiper/swiper.min.css';
 import 'swiper/components/effect-coverflow/effect-coverflow.min.css';
@@ -27,23 +23,15 @@ SwiperCore.use([EffectCoverflow, Autoplay]);
 
 export const Stories = () => {
   const toast = useToast();
-  const [time, setTime] = useState('');
   dayjs.extend(relativeTime);
   const history = useHistory();
-  const { userId } = useParams<{ userId: string }>();
-  const { loading, data } = useUserQuery({
-    variables: { id: userId },
+  const { storyId } = useParams<{ storyId: string }>();
+  const { loading, data } = useStoryQuery({
+    variables: { storyId },
   });
   const [likeStory] = useLikeStoryMutation();
   const { data: meData } = useMeQuery();
-  const [removeLike] = useRemoveLikeMutation();
   const [watched] = useWatchedMutation();
-  const [removeStory] = useRemoveStoryMutation();
-  useEffect(() => {
-    if (!loading && !data) {
-      history.push('/');
-    }
-  }, [loading, history, data]);
 
   return (
     <Flex h="100vh" justifyContent="center" alignItems="center">
@@ -52,66 +40,68 @@ export const Stories = () => {
           <Spinner />
         ) : (
           <Box position="relative">
-            <Flex alignItems="center" mb={5}>
-              <Avatar src={data?.user?.avatar!} mr={2} />
-              <Text as={Link} to={`/u/${data?.user?._id}`} mr={2}>
-                @{data?.user?.username}
-              </Text>
-              <Text color="gray">{dayjs(time).fromNow()}</Text>
+            {data && data.story ? (
+              <>
+                <Flex alignItems="center" mb={5}>
+                  <Avatar src={data.story.user.avatar!} mr={2} />
+                  <Text as={Link} to={`/u/${data.story.user?._id}`} mr={2}>
+                    @{data.story.user.username}
+                  </Text>
+                  <Text color="gray">
+                    {dayjs(data.story.createdAt).fromNow()}
+                  </Text>
 
-              <IconButton
-                ml="auto"
-                onClick={() => history.push('/')}
-                aria-label="close button"
-                icon={<CloseIcon />}
-              />
-            </Flex>
-            <Swiper
-              effect={'coverflow'}
-              grabCursor={true}
-              centeredSlides={true}
-              autoplay={{
-                delay: 9000,
-              }}
-              slidesPerView={'auto'}
-              coverflowEffect={{
-                rotate: 50,
-                stretch: 0,
-                depth: 100,
-                modifier: 1,
-                slideShadows: true,
-              }}
-            >
-              {data?.user?.stories.map((story) =>
-                !story ? null : (
-                  <SwiperSlide key={story._id}>
+                  <IconButton
+                    ml="auto"
+                    onClick={() => history.push('/')}
+                    aria-label="close button"
+                    icon={<CloseIcon />}
+                  />
+                </Flex>
+                <Swiper
+                  effect={'coverflow'}
+                  grabCursor={true}
+                  centeredSlides={true}
+                  slidesPerView={'auto'}
+                  coverflowEffect={{
+                    rotate: 50,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows: true,
+                  }}
+                >
+                  <SwiperSlide>
                     <InView
                       as="div"
                       onChange={async (inView, entry) => {
-                        if (inView) {
-                          setTime(story.createdAt);
-                        }
-                        if (inView && meData?.me?._id !== data.user?._id) {
-                          await watched({ variables: { storyId: story._id } });
+                        if (
+                          inView &&
+                          meData?.me?._id !== data?.story?.user?._id
+                        ) {
+                          await watched({
+                            variables: { storyId: data!.story!._id },
+                          });
                         }
                       }}
                     >
                       <img
                         style={{ margin: '0 auto' }}
-                        src={story.image_url.replace(
+                        src={data.story.image_url.replace(
                           '/upload',
                           '/upload/h_500'
                         )}
-                        alt={story.filename}
-                        onFocus={() => setTime(story.createdAt)}
+                        alt={data.story.filename}
                         onDoubleClick={async () => {
                           try {
                             await likeStory({
                               variables: {
-                                storyId: story._id,
+                                storyId: data?.story!._id,
                               },
                               update: (cache) => {
-                                cache.evict({ id: 'User:' + data.user?._id });
+                                cache.evict({
+                                  id: 'Story:' + data?.story!._id,
+                                });
                               },
                             });
                             toast({
@@ -132,79 +122,13 @@ export const Stories = () => {
                         }}
                       />
                     </InView>
-                    <Box mt={3}>
-                      <IconButton
-                        p={2}
-                        mx={1}
-                        aria-label="total likes"
-                        bgColor={story.likeStatus ? 'red.700' : undefined}
-                        onClick={async () => {
-                          try {
-                            await removeLike({
-                              variables: {
-                                storyId: story._id,
-                              },
-                              update: (cache) => {
-                                cache.evict({ id: 'User:' + data.user?._id });
-                              },
-                            });
-                          } catch (e) {
-                            toast({
-                              title: 'Error Ocurred',
-                              description: e.message,
-                              status: 'error',
-                              duration: 5000,
-                              isClosable: true,
-                            });
-                          }
-                        }}
-                        icon={
-                          <>
-                            <Icon as={FcLike} />
-                            <Text ml={1}>{story.likes.length}</Text>
-                          </>
-                        }
-                      />
-                      <IconButton
-                        p={2}
-                        mx={1}
-                        aria-label="share"
-                        icon={<Icon as={HiShare} />}
-                      />
-                      {meData?.me && meData.me._id === data.user?._id ? (
-                        <>
-                          <IconButton
-                            p={2}
-                            mx={1}
-                            aria-label="bookmark"
-                            icon={
-                              <>
-                                <ViewIcon />
-                                <Text ml={1}>{story.watched.length}</Text>
-                              </>
-                            }
-                          />
-                          <IconButton
-                            p={2}
-                            mx={1}
-                            aria-label="Edit Story button"
-                            onClick={async () => {
-                              await removeStory({
-                                variables: { storyId: story._id },
-                                update: (cache) => {
-                                  cache.evict({ id: 'Story:' + story._id });
-                                },
-                              });
-                            }}
-                            icon={<DeleteIcon />}
-                          />
-                        </>
-                      ) : null}
-                    </Box>
+                    <StoryCTXs me={meData?.me} story={data.story} />
                   </SwiperSlide>
-                )
-              )}
-            </Swiper>
+                </Swiper>
+              </>
+            ) : (
+              <Text>Sorry, No Story Found</Text>
+            )}
           </Box>
         )}
       </Container>
