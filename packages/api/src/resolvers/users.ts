@@ -11,6 +11,7 @@ import {
 } from 'type-graphql';
 import { MyContext } from 'src/utils/types';
 import { isLoggedIn } from 'src/middlewares/isLoggedIn';
+import { COOKIE_NAME } from 'src/utils/constants';
 
 @InputType()
 class UserInput {
@@ -26,6 +27,22 @@ class UserInput {
 
 @Resolver(User)
 export class UserResolver {
+  @Mutation(() => Boolean)
+  logout(@Ctx() { req, res }: MyContext) {
+    return new Promise((resolve) =>
+      req.session.destroy((err) => {
+        res.clearCookie(COOKIE_NAME);
+        if (err) {
+          console.log(err);
+          resolve(false);
+          return;
+        }
+
+        resolve(true);
+      })
+    );
+  }
+
   @Mutation(() => User)
   @UseMiddleware(isLoggedIn)
   async updateUser(
