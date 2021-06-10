@@ -78,7 +78,11 @@ export class UserResolver {
       return existingUser;
     } else {
       //? else if not there then create the user
-      const newUser = await UserModel.create(input);
+      const newUser = await UserModel.create({
+        ...input,
+        isBanned: false,
+        role: 'PLATFORM_USER',
+      });
       newUser.save();
       //? add user._id to session
       req.session.userId = newUser._id as unknown as string;

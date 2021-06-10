@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 import { Field, ObjectType } from 'type-graphql';
 import { prop as Property, getModelForClass } from '@typegoose/typegoose';
 
-enum TypeEnum {
+export enum TypeEnum {
   User = 'USER',
   Story = 'STORY',
 }
