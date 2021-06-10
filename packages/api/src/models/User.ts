@@ -3,6 +3,11 @@ import { Field, ObjectType } from 'type-graphql';
 import { prop as Property, getModelForClass, post } from '@typegoose/typegoose';
 import { StoryModel } from './Story';
 
+enum UserRoles {
+  Admin = 'ADMIN',
+  PlatformUser = 'PLATFORM_USER',
+}
+
 @post<User>('findOneAndDelete', async (user) => {
   if (user) {
     const stories = await StoryModel.find({ user: user._id });
@@ -37,6 +42,12 @@ export class User {
 
   @Property({ default: 5 })
   storyLimit?: number;
+
+  @Property({ enum: UserRoles, default: UserRoles.PlatformUser })
+  role: string;
+
+  @Property({ default: false })
+  isBanned: boolean;
 }
 
 export const UserModel = getModelForClass(User);
