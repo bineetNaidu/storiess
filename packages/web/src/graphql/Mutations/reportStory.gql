@@ -1,0 +1,9 @@
+mutation ReportStory($storyId: String!) {
+  reportStory(storyId: $storyId) {
+    _id
+    reportedStoryId
+    from
+    reportType
+    createdAt
+  }
+}

@@ -35,6 +35,8 @@ export type Mutation = {
   removeLike: Scalars['Boolean'];
   likeStory: Scalars['Boolean'];
   addStory?: Maybe<Story>;
+  reportStory: Report;
+  reportUser: Report;
 };
 
 
@@ -72,6 +74,16 @@ export type MutationAddStoryArgs = {
   input: StoryInput;
 };
 
+
+export type MutationReportStoryArgs = {
+  storyId: Scalars['String'];
+};
+
+
+export type MutationReportUserArgs = {
+  userId: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
@@ -80,6 +92,8 @@ export type Query = {
   me?: Maybe<User>;
   story?: Maybe<Story>;
   stories: Array<Story>;
+  reports: Array<Report>;
+  report?: Maybe<Report>;
 };
 
 
@@ -90,6 +104,21 @@ export type QueryUserArgs = {
 
 export type QueryStoryArgs = {
   storyId: Scalars['String'];
+};
+
+
+export type QueryReportArgs = {
+  id: Scalars['String'];
+};
+
+export type Report = {
+  __typename?: 'Report';
+  _id: Scalars['String'];
+  reportedStoryId?: Maybe<Scalars['String']>;
+  reportedUserId?: Maybe<Scalars['String']>;
+  from: Scalars['String'];
+  reportType: Scalars['String'];
+  createdAt: Scalars['DateTime'];
 };
 
 export type Story = {
@@ -208,6 +237,32 @@ export type RemoveStoryMutationVariables = Exact<{
 export type RemoveStoryMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'removeStory'>
+);
+
+export type ReportStoryMutationVariables = Exact<{
+  storyId: Scalars['String'];
+}>;
+
+
+export type ReportStoryMutation = (
+  { __typename?: 'Mutation' }
+  & { reportStory: (
+    { __typename?: 'Report' }
+    & Pick<Report, '_id' | 'reportedStoryId' | 'from' | 'reportType' | 'createdAt'>
+  ) }
+);
+
+export type ReportUserMutationVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type ReportUserMutation = (
+  { __typename?: 'Mutation' }
+  & { reportUser: (
+    { __typename?: 'Report' }
+    & Pick<Report, '_id' | 'reportedUserId' | 'from' | 'reportType' | 'createdAt'>
+  ) }
 );
 
 export type UpdateUserMutationVariables = Exact<{
@@ -504,6 +559,80 @@ export function useRemoveStoryMutation(baseOptions?: Apollo.MutationHookOptions<
 export type RemoveStoryMutationHookResult = ReturnType<typeof useRemoveStoryMutation>;
 export type RemoveStoryMutationResult = Apollo.MutationResult<RemoveStoryMutation>;
 export type RemoveStoryMutationOptions = Apollo.BaseMutationOptions<RemoveStoryMutation, RemoveStoryMutationVariables>;
+export const ReportStoryDocument = gql`
+    mutation ReportStory($storyId: String!) {
+  reportStory(storyId: $storyId) {
+    _id
+    reportedStoryId
+    from
+    reportType
+    createdAt
+  }
+}
+    `;
+export type ReportStoryMutationFn = Apollo.MutationFunction<ReportStoryMutation, ReportStoryMutationVariables>;
+
+/**
+ * __useReportStoryMutation__
+ *
+ * To run a mutation, you first call `useReportStoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReportStoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [reportStoryMutation, { data, loading, error }] = useReportStoryMutation({
+ *   variables: {
+ *      storyId: // value for 'storyId'
+ *   },
+ * });
+ */
+export function useReportStoryMutation(baseOptions?: Apollo.MutationHookOptions<ReportStoryMutation, ReportStoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReportStoryMutation, ReportStoryMutationVariables>(ReportStoryDocument, options);
+      }
+export type ReportStoryMutationHookResult = ReturnType<typeof useReportStoryMutation>;
+export type ReportStoryMutationResult = Apollo.MutationResult<ReportStoryMutation>;
+export type ReportStoryMutationOptions = Apollo.BaseMutationOptions<ReportStoryMutation, ReportStoryMutationVariables>;
+export const ReportUserDocument = gql`
+    mutation ReportUser($userId: String!) {
+  reportUser(userId: $userId) {
+    _id
+    reportedUserId
+    from
+    reportType
+    createdAt
+  }
+}
+    `;
+export type ReportUserMutationFn = Apollo.MutationFunction<ReportUserMutation, ReportUserMutationVariables>;
+
+/**
+ * __useReportUserMutation__
+ *
+ * To run a mutation, you first call `useReportUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReportUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [reportUserMutation, { data, loading, error }] = useReportUserMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useReportUserMutation(baseOptions?: Apollo.MutationHookOptions<ReportUserMutation, ReportUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReportUserMutation, ReportUserMutationVariables>(ReportUserDocument, options);
+      }
+export type ReportUserMutationHookResult = ReturnType<typeof useReportUserMutation>;
+export type ReportUserMutationResult = Apollo.MutationResult<ReportUserMutation>;
+export type ReportUserMutationOptions = Apollo.BaseMutationOptions<ReportUserMutation, ReportUserMutationVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($bio: String!) {
   updateUser(bio: $bio) {
