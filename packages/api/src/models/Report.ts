@@ -14,11 +14,15 @@ export class Report {
 
   @Field({ nullable: true })
   @Property()
-  storyId?: string;
+  reportedStoryId?: string;
 
   @Field({ nullable: true })
   @Property()
-  userId?: string;
+  reportedUserId?: string;
+
+  @Field()
+  @Property({ required: true })
+  from!: string;
 
   @Field()
   @Property({ enum: TypeEnum, required: true })

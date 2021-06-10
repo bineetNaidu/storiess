@@ -1,7 +1,15 @@
 import { Report, ReportModel, TypeEnum } from '../models/Report';
-import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from 'type-graphql';
 import { isLoggedIn } from '../middlewares/isLoggedIn';
 import { onlyAdmins } from '../middlewares/onlyAdmins';
+import { MyContext } from 'src/utils/types';
 
 @Resolver()
 export class ReportResolvers {
@@ -20,20 +28,30 @@ export class ReportResolvers {
   }
 
   @Mutation(() => Report)
-  async reportStory(@Arg('storyId') storyId: string): Promise<Report> {
+  @UseMiddleware(isLoggedIn)
+  async reportStory(
+    @Arg('storyId') storyId: string,
+    @Ctx() { req }: MyContext
+  ): Promise<Report> {
     const report = await ReportModel.create({
-      storyId,
+      reportedStoryId: storyId,
       reportType: TypeEnum.Story,
+      from: req.session.userId!,
     });
     await report.save();
     return report;
   }
 
   @Mutation(() => Report)
-  async reportUser(@Arg('userId') userId: string): Promise<Report> {
+  @UseMiddleware(isLoggedIn)
+  async reportUser(
+    @Arg('userId') userId: string,
+    @Ctx() { req }: MyContext
+  ): Promise<Report> {
     const report = await ReportModel.create({
-      userId,
+      reportedUserId: userId,
       reportType: TypeEnum.User,
+      from: req.session.userId!,
     });
     await report.save();
     return report;
