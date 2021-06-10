@@ -10,6 +10,7 @@ import {
 import { isLoggedIn } from '../middlewares/isLoggedIn';
 import { onlyAdmins } from '../middlewares/onlyAdmins';
 import { MyContext } from 'src/utils/types';
+import { StoryModel } from '../models/Story';
 
 @Resolver()
 export class ReportResolvers {
@@ -27,12 +28,19 @@ export class ReportResolvers {
     return ReportModel.findById(id);
   }
 
-  @Mutation(() => Report)
+  @Mutation(() => Report, { nullable: true })
   @UseMiddleware(isLoggedIn)
   async reportStory(
     @Arg('storyId') storyId: string,
     @Ctx() { req }: MyContext
-  ): Promise<Report> {
+  ): Promise<Report | null> {
+    const story = await StoryModel.findById(storyId);
+    if (!story) {
+      return null;
+    }
+    if (story.user === req.session.userId) {
+      return null;
+    }
     const report = await ReportModel.create({
       reportedStoryId: storyId,
       reportType: TypeEnum.Story,
@@ -42,12 +50,15 @@ export class ReportResolvers {
     return report;
   }
 
-  @Mutation(() => Report)
+  @Mutation(() => Report, { nullable: true })
   @UseMiddleware(isLoggedIn)
   async reportUser(
     @Arg('userId') userId: string,
     @Ctx() { req }: MyContext
-  ): Promise<Report> {
+  ): Promise<Report | null> {
+    if (userId === req.session.userId) {
+      return null;
+    }
     const report = await ReportModel.create({
       reportedUserId: userId,
       reportType: TypeEnum.User,
