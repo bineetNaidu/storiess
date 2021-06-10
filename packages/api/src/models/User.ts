@@ -3,7 +3,7 @@ import { Field, ObjectType } from 'type-graphql';
 import { prop as Property, getModelForClass, post } from '@typegoose/typegoose';
 import { StoryModel } from './Story';
 
-enum UserRoles {
+export enum UserRoles {
   Admin = 'ADMIN',
   PlatformUser = 'PLATFORM_USER',
 }
