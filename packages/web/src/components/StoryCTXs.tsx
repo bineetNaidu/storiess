@@ -72,16 +72,18 @@ export const StoryCTXs: FC<Props> = ({ me, story }) => {
             aria-label="report user button"
             icon={<WarningIcon />}
             onClick={async () => {
-              await reportStory({
+              const { data: reportData } = await reportStory({
                 variables: { storyId: story._id },
               });
-              toast({
-                title: 'Reported',
-                description: `You Have successfully reported against this story`,
-                isClosable: true,
-                duration: 5000,
-                status: 'info',
-              });
+              if (reportData?.reportStory !== null) {
+                toast({
+                  title: 'Reported',
+                  description: `You Have successfully reported against this story`,
+                  isClosable: true,
+                  duration: 5000,
+                  status: 'info',
+                });
+              }
             }}
           />
         </Tooltip>

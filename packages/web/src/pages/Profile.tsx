@@ -69,16 +69,18 @@ export const Profile = () => {
                         icon={<WarningIcon />}
                         onClick={async () => {
                           if (data.user) {
-                            await reportUser({
+                            const { data: reportData } = await reportUser({
                               variables: { userId: data.user._id! },
                             });
-                            toast({
-                              title: 'Reported',
-                              description: `You Have successfully reported against ${data.user.username}`,
-                              isClosable: true,
-                              duration: 5000,
-                              status: 'info',
-                            });
+                            if (reportData?.reportUser !== null) {
+                              toast({
+                                title: 'Reported',
+                                description: `You Have successfully reported against ${data.user.username}`,
+                                isClosable: true,
+                                duration: 5000,
+                                status: 'info',
+                              });
+                            }
                           }
                         }}
                       />

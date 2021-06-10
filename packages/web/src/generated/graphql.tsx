@@ -35,8 +35,8 @@ export type Mutation = {
   removeLike: Scalars['Boolean'];
   likeStory: Scalars['Boolean'];
   addStory?: Maybe<Story>;
-  reportStory: Report;
-  reportUser: Report;
+  reportStory?: Maybe<Report>;
+  reportUser?: Maybe<Report>;
 };
 
 
@@ -246,10 +246,10 @@ export type ReportStoryMutationVariables = Exact<{
 
 export type ReportStoryMutation = (
   { __typename?: 'Mutation' }
-  & { reportStory: (
+  & { reportStory?: Maybe<(
     { __typename?: 'Report' }
     & Pick<Report, '_id' | 'reportedStoryId' | 'from' | 'reportType' | 'createdAt'>
-  ) }
+  )> }
 );
 
 export type ReportUserMutationVariables = Exact<{
@@ -259,10 +259,10 @@ export type ReportUserMutationVariables = Exact<{
 
 export type ReportUserMutation = (
   { __typename?: 'Mutation' }
-  & { reportUser: (
+  & { reportUser?: Maybe<(
     { __typename?: 'Report' }
     & Pick<Report, '_id' | 'reportedUserId' | 'from' | 'reportType' | 'createdAt'>
-  ) }
+  )> }
 );
 
 export type UpdateUserMutationVariables = Exact<{
