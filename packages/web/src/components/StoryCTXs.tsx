@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { Box, IconButton, Text, useToast } from '@chakra-ui/react';
-import { Icon, DeleteIcon, ViewIcon } from '@chakra-ui/icons';
+import { Box, IconButton, Text, Tooltip, useToast } from '@chakra-ui/react';
+import { Icon, DeleteIcon, ViewIcon, WarningIcon } from '@chakra-ui/icons';
 import { FcLike } from 'react-icons/fc';
 import { HiShare } from 'react-icons/hi';
 import {
@@ -8,6 +8,7 @@ import {
   BaseStoryFragment,
   useRemoveStoryMutation,
   useRemoveLikeMutation,
+  useReportStoryMutation,
 } from '../generated/graphql';
 import { useHistory } from 'react-router';
 
@@ -20,7 +21,11 @@ export const StoryCTXs: FC<Props> = ({ me, story }) => {
   const toast = useToast();
   const [removeLike] = useRemoveLikeMutation();
   const [removeStory] = useRemoveStoryMutation();
+  const [reportStory] = useReportStoryMutation();
   const history = useHistory();
+
+  const isSameUser = me && me._id === story.user?._id;
+
   return (
     <Box mt={3}>
       <IconButton
@@ -61,7 +66,27 @@ export const StoryCTXs: FC<Props> = ({ me, story }) => {
         aria-label="share"
         icon={<Icon as={HiShare} />}
       />
-      {me && me._id === story.user?._id ? (
+      {!isSameUser ? (
+        <Tooltip hasArrow label="Click Report User" bg="blue.200">
+          <IconButton
+            aria-label="report user button"
+            icon={<WarningIcon />}
+            onClick={async () => {
+              await reportStory({
+                variables: { storyId: story._id },
+              });
+              toast({
+                title: 'Reported',
+                description: `You Have successfully reported against this story`,
+                isClosable: true,
+                duration: 5000,
+                status: 'info',
+              });
+            }}
+          />
+        </Tooltip>
+      ) : null}
+      {isSameUser ? (
         <>
           <IconButton
             p={2}
