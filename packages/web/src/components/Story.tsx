@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 interface Props {
-  story: BaseStoryFragment;
+  story: BaseStoryFragment & { isWatched?: boolean };
 }
 
 export const Story: FC<Props> = ({ story }) => {
@@ -18,12 +18,12 @@ export const Story: FC<Props> = ({ story }) => {
         as={Link}
         to={`/stories/${story._id}`}
         role="group"
-        border="2px"
         p={0.5}
-        borderColor="linear(to-r, red.500, yellow.500)"
+        className={story.isWatched ? undefined : 'awesome-border'}
         borderRadius="full"
         cursor="pointer"
         boxShadow="md"
+        opacity={story.isWatched ? 0.4 : 1}
       >
         <Avatar
           _groupHover={{ transform: 'scale(1.15)' }}

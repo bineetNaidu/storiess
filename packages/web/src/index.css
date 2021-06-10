@@ -12,3 +12,16 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+@keyframes animated-border {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+  }
+}
+
+.awesome-border {
+  animation: animated-border 1.5s infinite;
+}

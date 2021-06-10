@@ -15,7 +15,8 @@ export const Home = () => {
         <Spinner />
       ) : (
         <Wrap mt={4}>
-          {data && data.stories.map((s) => <Story key={s._id} story={s} />)}
+          {data &&
+            data.stories.map((s: any) => <Story key={s._id} story={s} />)}
         </Wrap>
       )}
     </Container>

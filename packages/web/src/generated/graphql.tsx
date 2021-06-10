@@ -101,6 +101,7 @@ export type Story = {
   user: User;
   likeStatus?: Maybe<Scalars['Boolean']>;
   watched: Array<Scalars['String']>;
+  isWatched?: Maybe<Scalars['Boolean']>;
   createdAt: Scalars['DateTime'];
 };
 
@@ -250,6 +251,7 @@ export type StoriesQuery = (
   { __typename?: 'Query' }
   & { stories: Array<(
     { __typename?: 'Story' }
+    & Pick<Story, 'isWatched'>
     & BaseStoryFragment
   )> }
 );
@@ -604,6 +606,7 @@ export const StoriesDocument = gql`
     query Stories {
   stories {
     ...BaseStory
+    isWatched
   }
 }
     ${BaseStoryFragmentDoc}`;

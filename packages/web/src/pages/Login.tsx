@@ -20,7 +20,7 @@ const Login = () => {
           avatar: res.profileObj.imageUrl,
           email: res.profileObj.email,
           googleId: res.googleId,
-          username: res.profileObj.name.replace(' ', '_').toLowerCase(),
+          username: res.profileObj.name.replace(' ', '_'),
         },
       },
     });
