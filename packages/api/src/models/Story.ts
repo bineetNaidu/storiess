@@ -55,6 +55,9 @@ export class Story {
   @Property({ type: Array, default: [] })
   watched?: string[];
 
+  @Field({ nullable: true })
+  isWatched?: boolean;
+
   @Field()
   @Property({ type: Date, default: Date.now() })
   createdAt?: Date;

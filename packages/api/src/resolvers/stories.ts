@@ -44,6 +44,22 @@ export class StoryResolver {
     return !!like;
   }
 
+  @FieldResolver(() => Boolean, { nullable: true })
+  async isWatched(
+    @Root() root: any,
+    @Ctx() { req }: MyContext
+  ): Promise<boolean | null> {
+    if (!req.session.userId) return null;
+    const story = await StoryModel.findById(root._doc._id);
+    if (!story) return null;
+
+    if (story.watched?.includes(req.session.userId)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @Query(() => Story, { nullable: true })
   async story(@Arg('storyId') storyId: string): Promise<Story | null> {
     return StoryModel.findById(storyId).populate('user');
