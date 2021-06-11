@@ -1,5 +1,0 @@
-mutation AddStory($input: StoryInput!) {
-  addStory(input: $input) {
-    ...BaseStory
-  }
-}

@@ -34,7 +34,6 @@ export type Mutation = {
   watched: Scalars['Boolean'];
   removeLike: Scalars['Boolean'];
   likeStory: Scalars['Boolean'];
-  addStory?: Maybe<Story>;
   reportStory?: Maybe<Report>;
   reportUser?: Maybe<Report>;
 };
@@ -67,11 +66,6 @@ export type MutationRemoveLikeArgs = {
 
 export type MutationLikeStoryArgs = {
   storyId: Scalars['String'];
-};
-
-
-export type MutationAddStoryArgs = {
-  input: StoryInput;
 };
 
 
@@ -134,14 +128,6 @@ export type Story = {
   createdAt: Scalars['DateTime'];
 };
 
-export type StoryInput = {
-  filename: Scalars['String'];
-  image_url: Scalars['String'];
-  etag: Scalars['String'];
-  publicId: Scalars['String'];
-  assetId: Scalars['String'];
-};
-
 export type User = {
   __typename?: 'User';
   _id: Scalars['String'];
@@ -173,19 +159,6 @@ export type BaseStoryFragment = (
 export type BaseUserFragment = (
   { __typename?: 'User' }
   & Pick<User, '_id' | 'email' | 'username' | 'avatar' | 'bio'>
-);
-
-export type AddStoryMutationVariables = Exact<{
-  input: StoryInput;
-}>;
-
-
-export type AddStoryMutation = (
-  { __typename?: 'Mutation' }
-  & { addStory?: Maybe<(
-    { __typename?: 'Story' }
-    & BaseStoryFragment
-  )> }
 );
 
 export type LikeStoryMutationVariables = Exact<{
@@ -370,39 +343,6 @@ export const BaseUserFragmentDoc = gql`
   bio
 }
     `;
-export const AddStoryDocument = gql`
-    mutation AddStory($input: StoryInput!) {
-  addStory(input: $input) {
-    ...BaseStory
-  }
-}
-    ${BaseStoryFragmentDoc}`;
-export type AddStoryMutationFn = Apollo.MutationFunction<AddStoryMutation, AddStoryMutationVariables>;
-
-/**
- * __useAddStoryMutation__
- *
- * To run a mutation, you first call `useAddStoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddStoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addStoryMutation, { data, loading, error }] = useAddStoryMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useAddStoryMutation(baseOptions?: Apollo.MutationHookOptions<AddStoryMutation, AddStoryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddStoryMutation, AddStoryMutationVariables>(AddStoryDocument, options);
-      }
-export type AddStoryMutationHookResult = ReturnType<typeof useAddStoryMutation>;
-export type AddStoryMutationResult = Apollo.MutationResult<AddStoryMutation>;
-export type AddStoryMutationOptions = Apollo.BaseMutationOptions<AddStoryMutation, AddStoryMutationVariables>;
 export const LikeStoryDocument = gql`
     mutation LikeStory($storyId: String!) {
   likeStory(storyId: $storyId)
