@@ -5,29 +5,13 @@ import { LikeModel } from '../models/Like';
 import {
   Arg,
   Ctx,
-  Field,
   FieldResolver,
-  InputType,
   Mutation,
   Resolver,
   Root,
   UseMiddleware,
   Query,
 } from 'type-graphql';
-
-@InputType()
-class StoryInput {
-  @Field()
-  filename: string;
-  @Field()
-  image_url: string;
-  @Field()
-  etag: string;
-  @Field()
-  publicId: string;
-  @Field()
-  assetId: string;
-}
 
 @Resolver(Story)
 export class StoryResolver {
@@ -164,24 +148,5 @@ export class StoryResolver {
     } catch (e) {
       return false;
     }
-  }
-
-  @Mutation(() => Story, { nullable: true })
-  @UseMiddleware(isLoggedIn)
-  async addStory(@Arg('input') input: StoryInput, @Ctx() { req }: MyContext) {
-    // ! Add Limitation to add Story
-    // if (user.stories.length === (user.storyLimit || 5)) {
-    //   return null;
-    // }
-
-    const story = await StoryModel.create({
-      ...input,
-      likes: [],
-      watched: [],
-      user: req.session.userId as string,
-    });
-    await story.save();
-
-    return story;
   }
 }

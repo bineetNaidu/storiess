@@ -12,6 +12,7 @@ import { MyContext } from './utils/types';
 import { COOKIE_NAME, ___prod___ } from './utils/constants';
 import { StoryResolver } from './resolvers/stories';
 import { ReportResolvers } from './resolvers/reports';
+import storyApi from './routers/story';
 
 dotenv.config();
 
@@ -64,6 +65,8 @@ const bootstrap = async () => {
     });
 
     await connectDb();
+
+    app.use('/api', storyApi);
 
     app.listen({ port: 4000 }, () => {
       console.log(

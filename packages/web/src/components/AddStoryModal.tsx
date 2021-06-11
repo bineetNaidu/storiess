@@ -9,7 +9,7 @@ import {
   ModalOverlay,
   useToast,
 } from '@chakra-ui/react';
-import { useAddStoryMutation } from 'src/generated/graphql';
+import { useMeQuery } from 'src/generated/graphql';
 
 interface Props {
   isOpen: boolean;
@@ -17,8 +17,8 @@ interface Props {
 }
 
 export const AddStoryModal: FC<Props> = ({ isOpen, onClose }) => {
+  const { data: meData, loading } = useMeQuery();
   const toast = useToast();
-  const [addStory] = useAddStoryMutation();
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -34,44 +34,32 @@ export const AddStoryModal: FC<Props> = ({ isOpen, onClose }) => {
           <Dropzone
             onDrop={async (files) => {
               try {
-                const url = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`;
-                const file = files[0];
+                if (!loading && meData?.me) {
+                  const file = files[0];
+                  const url = 'http://localhost:4000/api/story';
+                  const formData = new FormData();
+                  formData.append('enctype', 'multipart/form-data');
+                  formData.append('image', file);
+                  formData.append('user', meData.me._id);
 
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append(
-                  'upload_preset',
-                  process.env.REACT_APP_CLOUDINARY_PRESET_ID!
-                );
-
-                const res = await fetch(url, {
-                  method: 'POST',
-                  body: formData,
-                });
-
-                const {
-                  asset_id,
-                  etag,
-                  url: image_url,
-                  public_id,
-                  original_filename,
-                } = await res.json();
-
-                await addStory({
-                  variables: {
-                    input: {
-                      assetId: asset_id,
-                      etag,
-                      image_url,
-                      publicId: public_id,
-                      filename: original_filename,
-                    },
-                  },
-                  update: (cache) => {
-                    cache.evict({ fieldName: 'stories' });
+                  const res = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                  });
+                  const data = await res.json();
+                  if (data.success && data.data !== null) {
                     onClose();
-                  },
-                });
+                    toast({
+                      title: 'Success',
+                      description: 'Story Uploaded!',
+                      status: 'success',
+                      duration: 9000,
+                      isClosable: true,
+                    });
+                  } else {
+                    throw new Error(data.error);
+                  }
+                }
               } catch (e) {
                 toast({
                   title: 'Error',
