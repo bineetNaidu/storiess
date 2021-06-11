@@ -27,15 +27,6 @@ export class Story {
   @Property({ required: true })
   image_url: string;
 
-  @Property({ required: true })
-  publicId: string;
-
-  @Property({ required: true })
-  etag: string;
-
-  @Property({ required: true })
-  assetId: string;
-
   @Field()
   @Property({ required: true })
   filename: string;
