@@ -8,9 +8,11 @@ import {
 } from '@typegoose/typegoose';
 import { Like, LikeModel } from './Like';
 import { User } from './User';
+import { cloudinary } from '../configs/cloudinary';
 
 @post<Story>('findOneAndDelete', async (story) => {
   if (story) {
+    await cloudinary.uploader.destroy(story.filename);
     await LikeModel.deleteMany({
       _id: {
         $in: story.likes as any,
