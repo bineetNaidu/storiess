@@ -2,22 +2,24 @@ import { Router } from 'express';
 import multer from 'multer';
 import { StoryModel } from '../models/Story';
 import { storage } from '../configs/cloudinary';
-import { UserModel } from '../models/User';
+// import { UserModel } from '../models/User';
 
 const r = Router();
 const upload = multer({ storage });
 
 r.post(
   '/story',
-  async (req, _res, next) => {
-    const { user } = req.body;
-    const userExist = await UserModel.findById(user);
-    if (userExist) {
-      next();
-    } else {
-      next("ERROR::> User Doesn't Exist");
-    }
-  },
+  // async (req, _res, next) => {
+  //   const { user } = req.body;
+  //   console.log(req.);
+
+  //   const userExist = await UserModel.findById(user);
+  //   if (userExist) {
+  //     next();
+  //   } else {
+  //     next("ERROR::> User Doesn't Exist");
+  //   }
+  // },
   upload.single('image'),
   async (req, res) => {
     try {
