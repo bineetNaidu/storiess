@@ -24,6 +24,7 @@ function App() {
       height="100%"
       minHeight="100vh"
       position="relative"
+      bg="#1a202c"
     >
       <Navbar />
       <Switch>

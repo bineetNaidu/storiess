@@ -7,7 +7,6 @@ import {
   Stack,
   Button,
   Badge,
-  useColorModeValue,
 } from '@chakra-ui/react';
 
 export const Contact = () => {
@@ -16,7 +15,7 @@ export const Contact = () => {
       <Box
         maxW={'320px'}
         w={'full'}
-        bg={useColorModeValue('white', 'gray.900')}
+        bg={'gray.900'}
         boxShadow={'2xl'}
         rounded={'lg'}
         p={6}
@@ -35,31 +34,17 @@ export const Contact = () => {
         <Text fontWeight={600} color={'gray.500'} mb={4}>
           @bineet_naidu
         </Text>
-        <Text
-          textAlign={'center'}
-          color={useColorModeValue('gray.700', 'gray.400')}
-          px={3}
-        >
+        <Text textAlign={'center'} color={'gray.400'} px={3}>
           As the developer and designer of Stories, I handle all of the
           technical details and making sure you have a smooth experience. If you
           run into any bugs or issues send me an email to get it fixed.
         </Text>
 
         <Stack align={'center'} justify={'center'} direction={'row'} mt={6}>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
-            fontWeight={'400'}
-          >
+          <Badge px={2} py={1} bg={'gray.800'} fontWeight={'400'}>
             #developer
           </Badge>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
-            fontWeight={'400'}
-          >
+          <Badge px={2} py={1} bg={'gray.800'} fontWeight={'400'}>
             #stories
           </Badge>
         </Stack>

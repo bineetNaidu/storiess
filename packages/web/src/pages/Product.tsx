@@ -6,7 +6,6 @@ import {
   Button,
   Stack,
   Icon,
-  useColorModeValue,
   createIcon,
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
@@ -66,7 +65,7 @@ export const Product = () => {
             <Box>
               <Icon
                 as={Arrow}
-                color={useColorModeValue('gray.800', 'gray.300')}
+                color={'gray.300'}
                 w={71}
                 position={'absolute'}
                 right={-71}

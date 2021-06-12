@@ -7,7 +7,6 @@ import {
   Link,
   Stack,
   Text,
-  useColorModeValue,
   VisuallyHidden,
 } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
@@ -35,7 +34,7 @@ const SocialButton = ({
 }) => {
   return (
     <chakra.button
-      bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
+      bg={'blackAlpha.100'}
       rounded={'full'}
       w={8}
       h={8}
@@ -49,7 +48,7 @@ const SocialButton = ({
       justifyContent={'center'}
       transition={'background 0.3s ease'}
       _hover={{
-        bg: useColorModeValue('blackAlpha.200', 'whiteAlpha.200'),
+        bg: 'blackAlpha.200',
       }}
     >
       <VisuallyHidden>{label}</VisuallyHidden>
@@ -60,11 +59,7 @@ const SocialButton = ({
 
 export function Footer() {
   return (
-    <Box
-      marginTop="auto"
-      bg={useColorModeValue('gray.50', 'gray.900')}
-      color={useColorModeValue('gray.700', 'gray.200')}
-    >
+    <Box marginTop="auto" bg={'gray.900'} color={'gray.200'}>
       <Container
         as={Stack}
         maxW={'6xl'}
@@ -101,11 +96,7 @@ export function Footer() {
         </Stack>
       </Container>
 
-      <Box
-        borderTopWidth={1}
-        borderStyle={'solid'}
-        borderColor={useColorModeValue('gray.200', 'gray.700')}
-      >
+      <Box borderTopWidth={1} borderStyle={'solid'} borderColor={'gray.700'}>
         <Container
           as={Stack}
           maxW={'6xl'}
