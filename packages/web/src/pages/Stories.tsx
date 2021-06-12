@@ -34,7 +34,7 @@ export const Stories = () => {
   const [watched] = useWatchedMutation();
 
   return (
-    <Flex h="100vh" justifyContent="center" alignItems="center">
+    <Flex justifyContent="center">
       <Container>
         {loading ? (
           <Spinner />
