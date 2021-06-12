@@ -46,7 +46,7 @@ const Login = () => {
         isClosable: true,
         onCloseComplete: () => {
           setUserId(data.login._id);
-          history.replace('/');
+          history.push('/');
         },
       });
     }

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { ___prod___ } from '../utils/constants';
 
 export const connectDb = async () => {
   if (!process.env.DATABASE_URL) {
@@ -11,6 +12,8 @@ export const connectDb = async () => {
     keepAlive: true,
     useCreateIndex: true,
   });
-  mongoose.set('debug', true);
+  if (!___prod___) {
+    mongoose.set('debug', true);
+  }
   console.log('>>>>> MongoDB Connected <<<<<');
 };

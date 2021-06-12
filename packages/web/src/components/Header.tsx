@@ -40,11 +40,7 @@ export const Header: FC<Props> = ({ refetch }) => {
           rounded="full"
           to={`/u/${data?.me?._id}`}
         >
-          <Avatar
-            loading="lazy"
-            name={data?.me?.username}
-            src={data?.me?.avatar}
-          />
+          <Avatar name={data?.me?.username} src={data?.me?.avatar} />
         </IconButton>
         <IconButton
           aria-label="icon button"
