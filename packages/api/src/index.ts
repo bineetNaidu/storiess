@@ -24,7 +24,7 @@ const bootstrap = async () => {
     app.use(express.json());
     app.use(
       cors({
-        origin: 'http://localhost:3000',
+        origin: process.env.PUBLIC_URL!,
         credentials: true,
       })
     );
@@ -59,7 +59,7 @@ const bootstrap = async () => {
     server.applyMiddleware({
       app,
       cors: {
-        origin: 'http://localhost:3000',
+        origin: process.env.PUBLIC_URL!,
         credentials: true,
       },
     });
@@ -68,7 +68,7 @@ const bootstrap = async () => {
 
     app.use('/api', storyApi);
 
-    app.listen({ port: 4000 }, () => {
+    app.listen({ port: process.env.PORT }, () => {
       console.log(
         `🚀 Server ready at http://localhost:4000${server.graphqlPath}`
       );

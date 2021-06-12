@@ -38,7 +38,7 @@ export const AddStoryModal: FC<Props> = ({ isOpen, onClose, refetch }) => {
               try {
                 if (!loading && meData?.me) {
                   const file = files[0];
-                  const url = 'http://localhost:4000/api/story';
+                  const url = process.env.REACT_APP_API_STORY_URL!;
                   const formData = new FormData();
                   formData.append('enctype', 'multipart/form-data');
                   formData.append('image', file);
