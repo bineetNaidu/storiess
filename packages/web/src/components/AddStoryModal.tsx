@@ -9,14 +9,16 @@ import {
   ModalOverlay,
   useToast,
 } from '@chakra-ui/react';
-import { useMeQuery } from 'src/generated/graphql';
+import { StoriesQuery, useMeQuery } from 'src/generated/graphql';
+import { ApolloQueryResult } from '@apollo/client';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  refetch: () => Promise<ApolloQueryResult<StoriesQuery>>;
 }
 
-export const AddStoryModal: FC<Props> = ({ isOpen, onClose }) => {
+export const AddStoryModal: FC<Props> = ({ isOpen, onClose, refetch }) => {
   const { data: meData, loading } = useMeQuery();
   const toast = useToast();
   return (
@@ -48,6 +50,7 @@ export const AddStoryModal: FC<Props> = ({ isOpen, onClose }) => {
                   });
                   const data = await res.json();
                   if (data.success && data.data !== null) {
+                    refetch();
                     onClose();
                     toast({
                       title: 'Success',

@@ -4,10 +4,10 @@ import { Story } from '../components/Story';
 import { Header } from '../components/Header';
 
 export const Home = () => {
-  const { data, loading } = useStoriesQuery();
+  const { data, loading, refetch } = useStoriesQuery();
   return (
     <Container bgColor="#3c3f51" py={5} rounded="md">
-      <Header />
+      <Header refetch={refetch} />
       <Text fontSize="2xl" fontWeight="bold">
         Stories
       </Text>

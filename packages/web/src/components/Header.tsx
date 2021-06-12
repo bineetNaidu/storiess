@@ -2,12 +2,18 @@ import { FC } from 'react';
 import { AddIcon, BellIcon, ChatIcon } from '@chakra-ui/icons';
 import { AddStoryModal } from './AddStoryModal';
 import { Input, Flex, IconButton, Box, useDisclosure } from '@chakra-ui/react';
+import { ApolloQueryResult } from '@apollo/client';
+import { StoriesQuery } from 'src/generated/graphql';
 
-export const Header: FC = () => {
+interface Props {
+  refetch: () => Promise<ApolloQueryResult<StoriesQuery>>;
+}
+
+export const Header: FC<Props> = ({ refetch }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Flex mb={5} justifyContent="center" alignItems="center">
-      <AddStoryModal isOpen={isOpen} onClose={onClose} />
+      <AddStoryModal isOpen={isOpen} onClose={onClose} refetch={refetch} />
       <Input variant="outline" placeholder="@username" flex={0.4} />
 
       <Flex justifyContent="flex-end" alignItems="center" flex={0.6}>
