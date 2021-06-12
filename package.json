@@ -10,6 +10,11 @@
     "type": "git",
     "url": "git+https://github.com/bineetNaidu/stories.git"
   },
+  "scripts": {
+    "build": "lerna run build",
+    "build:server": "lerna run build --scope=@stories/api",
+    "build:web": "lerna run build --scope=@stories/web"
+  },
   "keywords": [],
   "author": "BineetNaidu <bineetnaiduapps@gmail.com> (https://bineetnaidu.github.io/)",
   "license": "MIT",
