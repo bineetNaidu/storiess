@@ -38,12 +38,7 @@ export const Product = () => {
             posted to a Story stays live for just 24 hours. After that, it’s
             gone. Stories’s Story is a great way to share events as they happen
             without clogging up your carefully curated feed with dozens of
-            throwaway images. Your friends and followers might be interested to
-            see what’s going on in your life or get a behind-the-scenes view of
-            what you’re working on, but they probably want to be able to opt-in
-            rather than have it just appear in their feed. It’s part of
-            Stories’s move to be a more complete social network, rather than
-            just a place for pretty pictures.
+            throwaway images.
           </Text>
           <Stack
             direction={'column'}

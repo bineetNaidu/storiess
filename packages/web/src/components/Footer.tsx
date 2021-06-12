@@ -95,7 +95,7 @@ export function Footer() {
           <Link as={RouterLink} to="/contact">
             Contact
           </Link>
-          <Link as={RouterLink} to="/report-bugs">
+          <Link as={RouterLink} to="/contact">
             Report a bug / issue
           </Link>
         </Stack>

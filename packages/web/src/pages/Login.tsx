@@ -42,11 +42,11 @@ const Login = () => {
         title: 'Successfully Logged you in',
         description: `Welcome ${data.login.username}`,
         status: 'success',
-        duration: 2000,
+        duration: 1000,
         isClosable: true,
         onCloseComplete: () => {
           setUserId(data.login._id);
-          history.push('/');
+          history.replace('/');
         },
       });
     }
