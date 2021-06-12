@@ -7,6 +7,7 @@ import { Profile } from './pages/Profile';
 import { Route, Switch } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
+import { Product } from './pages/Product';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <PrivateRoute exact path="/stories/:storyId" component={Stories} />
         <PrivateRoute exact path="/u/:userId" component={Profile} />
         <Route exact path="/login" component={Login} />
+        <Route exact path="/product" component={Product} />
       </Switch>
       <Footer />
     </Flex>
