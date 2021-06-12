@@ -11,8 +11,9 @@
     "url": "git+https://github.com/bineetNaidu/stories.git"
   },
   "scripts": {
+    "postinstall": "yarn run build:api",
     "build": "lerna run build",
-    "build:server": "lerna run build --scope=@stories/api",
+    "build:api": "lerna run build --scope=@stories/api",
     "build:web": "lerna run build --scope=@stories/web"
   },
   "keywords": [],
