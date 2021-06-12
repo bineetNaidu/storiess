@@ -1,4 +1,15 @@
-import { Box, Text, Flex, useToast } from '@chakra-ui/react';
+import {
+  Flex,
+  Box,
+  Stack,
+  Link,
+  Heading,
+  Text,
+  useColorModeValue,
+  useToast,
+  Button,
+  Center,
+} from '@chakra-ui/react';
 import {
   GoogleLogin,
   GoogleLoginResponse,
@@ -7,6 +18,7 @@ import {
 import { useHistory } from 'react-router';
 import { useStore } from 'src/lib/store';
 import { useLoginMutation } from '../generated/graphql';
+import { FcGoogle } from 'react-icons/fc';
 
 const Login = () => {
   const history = useHistory();
@@ -43,38 +55,52 @@ const Login = () => {
   const errorResponse = (res: GoogleLoginResponseOffline) => {
     alert(res.code);
   };
+
   return (
-    <Flex justifyContent="center" alignItems="center" height="100%">
-      <Box mt="5" textAlign="center">
-        <Text
-          bgGradient="linear(to-l, #7928CA,#FF0080)"
-          bgClip="text"
-          fontSize="6xl"
-          fontWeight="extrabold"
+    <Flex
+      // minH={'100vh'}
+      align={'center'}
+      justify={'center'}
+      bg={useColorModeValue('gray.50', 'gray.800')}
+    >
+      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+        <Stack align={'center'}>
+          <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+          <Text fontSize={'lg'} color={'gray.600'}>
+            to enjoy all of our cool <Link color={'blue.400'}>features</Link> ✌️
+          </Text>
+        </Stack>
+        <Box
+          rounded={'lg'}
+          bg={useColorModeValue('white', 'gray.700')}
+          boxShadow={'lg'}
+          p={8}
         >
-          Get started with Stories
-        </Text>
-        <GoogleLogin
-          clientId={process.env.REACT_APP_GOOGLE_CLIENT_KEY!}
-          onSuccess={responseGoogle as any}
-          onFailure={errorResponse}
-          isSignedIn={true}
-        >
-          <Box
-            as="button"
-            p={4}
-            color="white"
-            fontWeight="bold"
-            borderRadius="md"
-            bgGradient="linear(to-r, teal.500,green.500)"
-            _hover={{
-              bgGradient: 'linear(to-r, red.500, yellow.500)',
-            }}
-          >
-            Login With Google
-          </Box>
-        </GoogleLogin>
-      </Box>
+          <Stack spacing={4}>
+            <GoogleLogin
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_KEY!}
+              onSuccess={responseGoogle as any}
+              onFailure={errorResponse}
+              isSignedIn={true}
+              render={(props) => (
+                <Center p={8}>
+                  <Button
+                    w={'full'}
+                    maxW={'md'}
+                    variant={'outline'}
+                    leftIcon={<FcGoogle />}
+                    onClick={props.onClick}
+                  >
+                    <Center>
+                      <Text>Sign in with Google</Text>
+                    </Center>
+                  </Button>
+                </Center>
+              )}
+            />
+          </Stack>
+        </Box>
+      </Stack>
     </Flex>
   );
 };
