@@ -42,6 +42,8 @@ const bootstrap = async () => {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // ? 1 week
           maxAge: 1000 * 60 * 60 * 24 * 7,
           httpOnly: true,
+          sameSite: 'none',
+          secure: ___prod___,
         },
         saveUninitialized: false,
         secret: process.env.SESSION_SECRET!,
