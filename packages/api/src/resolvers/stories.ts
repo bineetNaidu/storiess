@@ -12,6 +12,7 @@ import {
   UseMiddleware,
   Query,
 } from 'type-graphql';
+import { User } from '../models/User';
 
 @Resolver(Story)
 export class StoryResolver {
@@ -26,6 +27,11 @@ export class StoryResolver {
       storyId: root._doc._id,
     });
     return !!like;
+  }
+
+  @FieldResolver(() => User)
+  user(@Root() root: any, @Ctx() { userLoader }: MyContext) {
+    return userLoader.load(root._doc.user);
   }
 
   @FieldResolver(() => Boolean, { nullable: true })
@@ -46,21 +52,21 @@ export class StoryResolver {
 
   @Query(() => Story, { nullable: true })
   async story(@Arg('storyId') storyId: string): Promise<Story | null> {
-    return StoryModel.findById(storyId).populate('user');
+    return StoryModel.findById(storyId);
   }
 
   @Query(() => [Story])
   async stories(): Promise<Story[]> {
-    const stories = await StoryModel.find({}).populate('user');
-
+    const stories = await StoryModel.find({});
+    return stories;
     // @ts-ignore
-    return stories.map((s) => {
-      const d1 = new Date(s.deleteAt!);
-      const d2 = new Date(Date.now());
-      if (d2 < d1) {
-        return s;
-      }
-    });
+    // return stories.map((s) => {
+    //   const d1 = new Date(s.deleteAt!);
+    //   const d2 = new Date(Date.now());
+    //   if (d2 < d1) {
+    //     return s;
+    //   }
+    // });
   }
 
   @Mutation(() => Boolean)

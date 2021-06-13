@@ -15,6 +15,7 @@ import { MyContext } from './utils/types';
 import { COOKIE_NAME, ___prod___ } from './utils/constants';
 import { StoryResolver } from './resolvers/stories';
 import { ReportResolvers } from './resolvers/reports';
+import { createUserLoader } from './lib/createUserLoader';
 
 if (!___prod___) {
   dotenv.config();
@@ -88,7 +89,11 @@ const bootstrap = async () => {
           ReportResolvers,
         ],
       }),
-      context: ({ req, res }): MyContext => ({ req, res }),
+      context: ({ req, res }): MyContext => ({
+        req,
+        res,
+        userLoader: createUserLoader(),
+      }),
     });
 
     server.applyMiddleware({
