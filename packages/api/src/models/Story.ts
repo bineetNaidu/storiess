@@ -55,8 +55,10 @@ export class Story {
   @Property({ type: Date, default: Date.now() })
   createdAt?: Date;
 
-  @Property({ type: Date, default: new Date(new Date().setHours(24)) })
-  deleteAt?: Date;
+  @Property({
+    default: Date.now() + 1000 * 60 * 60 * 24,
+  })
+  deleteAt?: number;
 }
 
 export const StoryModel = getModelForClass(Story);
