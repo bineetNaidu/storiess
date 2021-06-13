@@ -58,15 +58,15 @@ export class StoryResolver {
   @Query(() => [Story])
   async stories(): Promise<Story[]> {
     const stories = await StoryModel.find({});
-    return stories;
+    // return stories;
     // @ts-ignore
-    // return stories.map((s) => {
-    //   const d1 = new Date(s.deleteAt!);
-    //   const d2 = new Date(Date.now());
-    //   if (d2 < d1) {
-    //     return s;
-    //   }
-    // });
+    return stories.map((s) => {
+      const d1 = new Date(s.deleteAt!);
+      const d2 = new Date(Date.now());
+      if (d2 < d1) {
+        return s;
+      }
+    });
   }
 
   @Mutation(() => Boolean)
