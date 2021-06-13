@@ -1,7 +1,10 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import dotenv from 'dotenv';
-dotenv.config();
+import { ___prod___ } from '../utils/constants';
+if (!___prod___) {
+  dotenv.config();
+}
 
 if (!process.env.CLOUDINARY_CLOUD_NAME)
   throw new Error('Env(CLOUDINARY_CLOUD_NAME):: Not Found!');

@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
+import storyApi from './routers/story';
+import MongoStore from 'connect-mongo';
+import helmet from 'helmet';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { HelloResolver } from './resolvers/Hello';
@@ -12,14 +15,14 @@ import { MyContext } from './utils/types';
 import { COOKIE_NAME, ___prod___ } from './utils/constants';
 import { StoryResolver } from './resolvers/stories';
 import { ReportResolvers } from './resolvers/reports';
-import storyApi from './routers/story';
 
-dotenv.config();
+if (!___prod___) {
+  dotenv.config();
+}
 
 const bootstrap = async () => {
   try {
     const app = express();
-
     app.set('trust proxy', 1);
     app.use(express.json());
     app.use(
@@ -30,16 +33,48 @@ const bootstrap = async () => {
     );
     app.use(
       session({
+        store: MongoStore.create({
+          mongoUrl: process.env.DATABASE_URL!,
+        }),
         name: COOKIE_NAME,
         cookie: {
-          maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // ? 1 week
+          maxAge: 1000 * 60 * 60 * 24 * 7,
           httpOnly: true,
-          sameSite: 'lax', // csrf
-          secure: ___prod___, // cookie only works in https
         },
         saveUninitialized: false,
         secret: process.env.SESSION_SECRET!,
         resave: false,
+      })
+    );
+    app.use(
+      helmet({
+        contentSecurityPolicy: {
+          directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'"],
+            scriptSrc: [
+              "'unsafe-inline'",
+              "'self'",
+              'http://cdn.jsdelivr.net/npm/@apollographql/',
+            ],
+            styleSrc: [
+              "'self'",
+              "'unsafe-inline'",
+              'http://cdn.jsdelivr.net/npm/@apollographql/',
+            ],
+            workerSrc: ["'self'", 'blob:'],
+            objectSrc: [],
+            imgSrc: [
+              "'self'",
+              'blob:',
+              'data:',
+              'https://images.unsplash.com/',
+              'http://cdn.jsdelivr.net/npm/@apollographql/',
+            ],
+            fontSrc: ["'self'", 'https://fonts.googleapis.com/'],
+          },
+        },
       })
     );
 
