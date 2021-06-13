@@ -4,8 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { ChakraProvider } from '@chakra-ui/react';
+import {
+  ChakraProvider,
+  ColorModeScript,
+  ColorModeProvider,
+} from '@chakra-ui/react';
 import { ApolloProvider, InMemoryCache, ApolloClient } from '@apollo/client';
+import theme from './lib/theme';
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_API_URL!,
@@ -18,7 +23,10 @@ ReactDOM.render(
     <BrowserRouter>
       <ApolloProvider client={client}>
         <ChakraProvider resetCSS>
-          <App />
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+          <ColorModeProvider options={{ initialColorMode: 'dark' }}>
+            <App />
+          </ColorModeProvider>
         </ChakraProvider>
       </ApolloProvider>
     </BrowserRouter>
