@@ -71,7 +71,6 @@ export const Header: FC<Props> = ({ refetch }) => {
           borderRadius="md"
           bgGradient="linear(to-r, red.500, yellow.500)"
           onClick={onOpen}
-          disabled={!!data?.me}
         >
           <Flex alignItems="center">
             <AddIcon mr={1} />

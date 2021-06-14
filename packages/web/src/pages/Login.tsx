@@ -59,13 +59,16 @@ const Login = () => {
   return (
     <Flex
       // minH={'100vh'}
-      align={'center'}
-      justify={'center'}
+      w="full"
+      alignItems={'center'}
+      justifyContent={'center'}
       bg={useColorModeValue('gray.50', 'gray.800')}
     >
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-        <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={[0, 6]}>
+        <Stack alignItems={'center'}>
+          <Heading fontSize={'4xl'} textAlign="center">
+            Sign in to your account
+          </Heading>
           <Text fontSize={'lg'} color={'gray.600'}>
             to enjoy all of our cool <Link color={'blue.400'}>features</Link> ✌️
           </Text>
@@ -76,14 +79,14 @@ const Login = () => {
           boxShadow={'lg'}
           p={8}
         >
-          <Stack spacing={4}>
+          <Stack spacing={[2, 4]}>
             <GoogleLogin
               clientId={process.env.REACT_APP_GOOGLE_CLIENT_KEY!}
               onSuccess={responseGoogle as any}
               onFailure={errorResponse}
               isSignedIn={true}
               render={(props) => (
-                <Center p={8}>
+                <Center p={[2, 8]}>
                   <Button
                     w={'full'}
                     maxW={'md'}
