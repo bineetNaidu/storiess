@@ -23,7 +23,7 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     // @ts-ignore
-    folder: 'stories_v2',
+    folder: ___prod___ ? 'stories_v2' : 'stories_dev',
     allowed_formats: ['jpeg', 'png', 'jpg'],
   },
 });

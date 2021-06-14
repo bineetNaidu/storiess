@@ -2,6 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import { StoryModel } from '../models/Story';
 import { storage } from '../configs/cloudinary';
+import { UserModel } from '../models/User';
 // import { UserModel } from '../models/User';
 
 const r = Router();
@@ -33,6 +34,19 @@ r.post(
       });
 
       await story.save();
+
+      const user = await UserModel.findById(story.user);
+      if (!user) {
+        throw new Error('Not Authenticated!. No user was found');
+      }
+      const value = user.storyLimit!;
+      if (value >= 5) {
+        throw new Error(
+          'You have reached your story limit. Either delete a story or wait for the existing stories to vanish'
+        );
+      }
+      await user.update({ storyLimit: value + 1 });
+      await user.save();
 
       res.json({ data: story, success: true });
     } catch (err) {

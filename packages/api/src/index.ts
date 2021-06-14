@@ -42,7 +42,7 @@ const bootstrap = async () => {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // ? 1 week
           maxAge: 1000 * 60 * 60 * 24 * 7,
           httpOnly: true,
-          sameSite: 'none',
+          sameSite: ___prod___ ? 'none' : 'lax',
           secure: ___prod___,
         },
         saveUninitialized: false,

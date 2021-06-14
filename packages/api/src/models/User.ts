@@ -40,7 +40,7 @@ export class User {
   @Property({ required: true, unique: true })
   googleId!: string;
 
-  @Property({ default: 5 })
+  @Property({ default: 0, max: 5 })
   storyLimit?: number;
 
   @Property({ enum: UserRoles, default: UserRoles.PlatformUser })

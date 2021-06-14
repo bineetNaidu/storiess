@@ -7,11 +7,22 @@ import {
   post,
 } from '@typegoose/typegoose';
 import { Like, LikeModel } from './Like';
-import { User } from './User';
+import { User, UserModel } from './User';
 import { cloudinary } from '../configs/cloudinary';
 
 @post<Story>('findOneAndDelete', async (story) => {
   if (story) {
+    const user = await UserModel.findById(story.user);
+    if (!user) {
+      throw new Error('Not Authenticated!. No user was found');
+    }
+    const value = user.storyLimit!;
+    if (value < 0) {
+      await user.update({ storyLimit: value });
+    } else {
+      await user.update({ storyLimit: value - 1 });
+    }
+    await user.save();
     await cloudinary.uploader.destroy(story.filename);
     await LikeModel.deleteMany({
       _id: {
