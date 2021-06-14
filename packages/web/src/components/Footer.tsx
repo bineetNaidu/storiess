@@ -80,7 +80,7 @@ export function Footer() {
             Stories
           </Text>
         </Flex>
-        <Stack direction={'row'} spacing={6} color="gray">
+        <Stack direction={'row'} wrap={['wrap']} spacing={[2, 6]} color="gray">
           <Link as={RouterLink} to="/">
             Home
           </Link>

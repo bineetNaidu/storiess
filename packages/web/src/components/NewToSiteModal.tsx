@@ -29,7 +29,6 @@ export const NewToSiteModal: FC<Props> = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onClose={handleClose}
       closeOnOverlayClick={false}
-      isCentered
       motionPreset="scale"
     >
       <ModalOverlay />

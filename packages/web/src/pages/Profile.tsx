@@ -65,7 +65,7 @@ export const Profile = () => {
             <Text>No Data Found For this User!</Text>
           ) : (
             <>
-              <Flex>
+              <Flex flexDirection={['column', 'row']} alignItems={['center']}>
                 <Avatar
                   size="lg"
                   src={data.user.avatar!}
@@ -74,7 +74,11 @@ export const Profile = () => {
                 <Divider mx={5} h="max-content" orientation="vertical" />
 
                 <Box>
-                  <Flex alignItems="center" mb={3}>
+                  <Flex
+                    alignItems="center"
+                    mb={3}
+                    flexDirection={['column', 'row']}
+                  >
                     <Text mr={4}>@{data.user.username}</Text>
                     {meData?.me?._id !== data.user._id ? (
                       <Tooltip hasArrow label="Click Report User" bg="blue.200">
