@@ -27,7 +27,7 @@ class UserInput {
 
 @Resolver(User)
 export class UserResolver {
-  @Mutation(() => [User])
+  @Query(() => [User])
   @UseMiddleware(isLoggedIn)
   async searchUser(@Arg('query') q: string): Promise<User[]> {
     const regexQuery = new RegExp(
