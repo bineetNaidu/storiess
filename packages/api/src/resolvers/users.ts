@@ -27,6 +27,17 @@ class UserInput {
 
 @Resolver(User)
 export class UserResolver {
+  @Mutation(() => [User])
+  @UseMiddleware(isLoggedIn)
+  async searchUser(@Arg('query') q: string): Promise<User[]> {
+    const regexQuery = new RegExp(
+      q.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'),
+      'gi'
+    );
+    const foundUsers = await UserModel.find({ username: regexQuery });
+    return foundUsers;
+  }
+
   @Mutation(() => Boolean)
   logout(@Ctx() { req, res }: MyContext) {
     return new Promise((resolve) =>
