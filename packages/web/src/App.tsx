@@ -10,6 +10,7 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { Product } from './pages/Product';
 import { Contact } from './pages/Contact';
+import { SearchUser } from './pages/SearchUser';
 
 function App() {
   useEffect(() => {
@@ -31,6 +32,7 @@ function App() {
         <PrivateRoute exact path="/" component={Home} />
         <PrivateRoute exact path="/stories/:storyId" component={Stories} />
         <PrivateRoute exact path="/u/:userId" component={Profile} />
+        <PrivateRoute exact path="/u" component={SearchUser} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/product" component={Product} />
         <Route exact path="/contact" component={Contact} />
