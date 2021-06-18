@@ -3,14 +3,7 @@ import { Link } from 'react-router-dom';
 import { AddIcon, Icon } from '@chakra-ui/icons';
 import { Avatar } from '@chakra-ui/avatar';
 import { AddStoryModal } from './AddStoryModal';
-import {
-  Input,
-  Flex,
-  IconButton,
-  Box,
-  useDisclosure,
-  Text,
-} from '@chakra-ui/react';
+import { Flex, IconButton, Box, useDisclosure, Text } from '@chakra-ui/react';
 import { ApolloQueryResult, useApolloClient } from '@apollo/client';
 import {
   StoriesQuery,
@@ -20,6 +13,7 @@ import {
 import { HiOutlineLogout } from 'react-icons/hi';
 import { useGoogleLogout } from 'react-google-login';
 import { useStore } from '../lib/store';
+import { SearchForm } from './SearchForm';
 
 interface Props {
   refetch: () => Promise<ApolloQueryResult<StoriesQuery>>;
@@ -37,8 +31,7 @@ export const Header: FC<Props> = ({ refetch }) => {
   return (
     <Flex mb={5} justifyContent="center" alignItems="center">
       <AddStoryModal isOpen={isOpen} onClose={onClose} refetch={refetch} />
-      <Input variant="outline" placeholder="@username" flex={0.4} />
-
+      <SearchForm />
       <Flex justifyContent="flex-end" alignItems="center" flex={0.6}>
         <IconButton
           aria-label="icon button"
