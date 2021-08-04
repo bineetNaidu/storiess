@@ -124,7 +124,7 @@ export const Profile = () => {
                     </Text>
                   ) : (
                     <Text mt={1} color="gray" fontStyle="italic">
-                      {data.user.username} has setup their bio
+                      {data.user.username} haven't setup their bio yet!
                     </Text>
                   )}
                 </Box>
