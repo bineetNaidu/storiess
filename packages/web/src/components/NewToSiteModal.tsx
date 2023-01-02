@@ -62,7 +62,7 @@ export const NewToSiteModal: FC<Props> = ({ isOpen, onClose }) => {
           </Box>
           <Box mt={2}>
             <Text fontWeight="extrabold" color="blue.500" fontSize="xl">
-              Featues 😃
+              Features 😃
             </Text>
             <OrderedList px={2}>
               <ListItem>Add Stories (limit 5 story a a time 😐)</ListItem>
