@@ -5,7 +5,7 @@ import { Home } from './pages/Home';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Stories } from './pages/Stories';
 import { Profile } from './pages/Profile';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { Product } from './pages/Product';
@@ -28,16 +28,15 @@ function App() {
       bg="#1a202c"
     >
       <Navbar />
-      <Switch>
-        <PrivateRoute exact path="/" component={Home} />
-        <PrivateRoute exact path="/stories/:storyId" component={Stories} />
-        <PrivateRoute exact path="/u/:userId" component={Profile} />
-        <PrivateRoute exact path="/u" component={SearchUser} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/product" component={Product} />
-        <Route exact path="/contact" component={Contact} />
-        <Redirect to="/product" />
-      </Switch>
+      <Routes>
+        <PrivateRoute path="/" element={<Home />} />
+        <PrivateRoute path="/stories/:storyId" element={<Stories />} />
+        <PrivateRoute path="/u/:userId" element={<Profile />} />
+        <PrivateRoute path="/u" element={<SearchUser />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/product" element={<Product />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
       <Footer />
     </Flex>
   );

@@ -10,7 +10,7 @@ import {
   useRemoveLikeMutation,
   useReportStoryMutation,
 } from '../generated/graphql';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 
 interface Props {
   me?: BaseUserFragment | null | undefined;
@@ -22,7 +22,7 @@ export const StoryCTXs: FC<Props> = ({ me, story }) => {
   const [removeLike] = useRemoveLikeMutation();
   const [removeStory] = useRemoveStoryMutation();
   const [reportStory] = useReportStoryMutation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const isSameUser = me && me._id === story.user?._id;
 
@@ -43,7 +43,7 @@ export const StoryCTXs: FC<Props> = ({ me, story }) => {
                 cache.evict({ id: 'Story:' + story._id });
               },
             });
-          } catch (e) {
+          } catch (e: Error | unknown | any) {
             toast({
               title: 'Error Ocurred',
               description: e.message,
@@ -110,7 +110,7 @@ export const StoryCTXs: FC<Props> = ({ me, story }) => {
                 variables: { storyId: story._id },
                 update: (cache) => {
                   cache.evict({ id: 'Story:' + story._id });
-                  history.push('/');
+                  navigate('/');
                 },
               });
             }}

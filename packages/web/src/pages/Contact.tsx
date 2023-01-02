@@ -24,7 +24,6 @@ export const Contact = () => {
         <Avatar
           size={'xl'}
           src="https://avatars.githubusercontent.com/u/66471461?v=4"
-          alt={'Avatar Alt'}
           mb={4}
           pos={'relative'}
         />

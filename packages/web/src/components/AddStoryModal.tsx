@@ -36,6 +36,11 @@ export const AddStoryModal: FC<Props> = ({ isOpen, onClose, refetch }) => {
           <Dropzone
             onDrop={async (files) => {
               try {
+                files.forEach((file) => {
+                  if (file.type !== 'image/jpeg' || 'image/png') {
+                    throw Error('The file should an image');
+                  }
+                });
                 if (!loading && meData?.me) {
                   const file = files[0];
                   const url = process.env.REACT_APP_API_STORY_URL!;
@@ -63,7 +68,7 @@ export const AddStoryModal: FC<Props> = ({ isOpen, onClose, refetch }) => {
                     throw new Error(data.error);
                   }
                 }
-              } catch (e) {
+              } catch (e: Error | any | unknown) {
                 toast({
                   title: 'Error',
                   description: e.message,
@@ -73,7 +78,7 @@ export const AddStoryModal: FC<Props> = ({ isOpen, onClose, refetch }) => {
                 });
               }
             }}
-            accept="image/jpeg, image/png"
+            // accept="image/jpeg, image/png"
             multiple={false}
           >
             {({ getRootProps, getInputProps }) => (

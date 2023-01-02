@@ -71,12 +71,7 @@ export const UpdateProfileDrawer: FC<Props> = ({
                 <Stack spacing="24px">
                   <Box>
                     <FormLabel htmlFor="bio">Bio</FormLabel>
-                    <Textarea
-                      type="textarea"
-                      id="bio"
-                      autoFocus
-                      {...getFieldProps('bio')}
-                    />
+                    <Textarea id="bio" autoFocus {...getFieldProps('bio')} />
                   </Box>
                 </Stack>
               </DrawerBody>

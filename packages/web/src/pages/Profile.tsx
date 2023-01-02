@@ -32,7 +32,7 @@ export const Profile = () => {
   const toast = useToast();
   const { userId } = useParams<{ userId: string }>();
   const { loading, data } = useUserQuery({
-    variables: { id: userId },
+    variables: { id: userId ?? '' },
   });
   const [reportUser] = useReportUserMutation();
   const { data: meData } = useMeQuery();

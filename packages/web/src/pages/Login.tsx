@@ -15,13 +15,34 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from 'react-google-login';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useStore } from 'src/lib/store';
 import { useLoginMutation } from '../generated/graphql';
 import { FcGoogle } from 'react-icons/fc';
 
+const GoogleAuthButton = (props: {
+  onClick: () => void;
+  disabled?: boolean;
+}) => {
+  return (
+    <Center p={[2, 8]}>
+      <Button
+        w={'full'}
+        maxW={'md'}
+        variant={'outline'}
+        leftIcon={<FcGoogle />}
+        onClick={props.onClick}
+      >
+        <Center>
+          <Text>Sign in with Google</Text>
+        </Center>
+      </Button>
+    </Center>
+  );
+};
+
 const Login = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const setUserId = useStore((state) => state.setUserId);
   const [login] = useLoginMutation();
   const toast = useToast();
@@ -46,7 +67,7 @@ const Login = () => {
         isClosable: true,
         onCloseComplete: () => {
           setUserId(data.login._id);
-          history.push('/');
+          navigate('/');
         },
       });
     }
@@ -55,6 +76,7 @@ const Login = () => {
   const errorResponse = (res: GoogleLoginResponseOffline) => {
     alert(res.code);
   };
+  const GoogleLoginCustom = GoogleLogin as any;
 
   return (
     <Flex
@@ -80,26 +102,12 @@ const Login = () => {
           p={8}
         >
           <Stack spacing={[2, 4]}>
-            <GoogleLogin
+            <GoogleLoginCustom
               clientId={process.env.REACT_APP_GOOGLE_CLIENT_KEY!}
               onSuccess={responseGoogle as any}
               onFailure={errorResponse}
               isSignedIn={true}
-              render={(props) => (
-                <Center p={[2, 8]}>
-                  <Button
-                    w={'full'}
-                    maxW={'md'}
-                    variant={'outline'}
-                    leftIcon={<FcGoogle />}
-                    onClick={props.onClick}
-                  >
-                    <Center>
-                      <Text>Sign in with Google</Text>
-                    </Center>
-                  </Button>
-                </Center>
-              )}
+              render={GoogleAuthButton}
             />
           </Stack>
         </Box>

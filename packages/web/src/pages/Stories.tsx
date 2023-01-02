@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import SwiperCore, { EffectCoverflow, Autoplay } from 'swiper/core';
+import SwiperCore, { EffectCoverflow, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {
   Avatar,
@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { Box, Container, Flex, Text } from '@chakra-ui/layout';
 import { CloseIcon } from '@chakra-ui/icons';
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { InView } from 'react-intersection-observer';
 import { StoryCTXs } from '../components/StoryCTXs';
 import { LikeAnimation } from '../components/LikeAnimation';
@@ -23,7 +23,7 @@ import {
 } from '../generated/graphql';
 
 import 'swiper/swiper.min.css';
-import 'swiper/components/effect-coverflow/effect-coverflow.min.css';
+// import 'swiper/components/effect-coverflow/effect-coverflow.min.css';
 
 // install Swiper modules
 SwiperCore.use([EffectCoverflow, Autoplay]);
@@ -31,10 +31,10 @@ SwiperCore.use([EffectCoverflow, Autoplay]);
 export const Stories = () => {
   const toast = useToast();
   dayjs.extend(relativeTime);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { storyId } = useParams<{ storyId: string }>();
   const { loading, data } = useStoryQuery({
-    variables: { storyId },
+    variables: { storyId: storyId ?? '' },
   });
   const [likeStory] = useLikeStoryMutation();
   const { data: meData } = useMeQuery();
@@ -61,7 +61,7 @@ export const Stories = () => {
 
                   <IconButton
                     ml="auto"
-                    onClick={() => history.push('/')}
+                    onClick={() => navigate('/')}
                     aria-label="close button"
                     icon={<CloseIcon />}
                   />
@@ -127,7 +127,7 @@ export const Stories = () => {
                                 duration: 5000,
                                 isClosable: true,
                               });
-                            } catch (e) {
+                            } catch (e: Error | unknown | any) {
                               toast({
                                 title: 'Error Ocurred',
                                 description: e.message,

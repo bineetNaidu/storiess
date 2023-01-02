@@ -1,16 +1,16 @@
 import { FC } from 'react';
 import { Formik, Form } from 'formik';
 import { Input, Box } from '@chakra-ui/react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const SearchForm: FC = () => {
-  const h = useHistory();
+  const navigate = useNavigate();
   return (
     <Box flex={0.4}>
       <Formik
         initialValues={{ q: '' }}
         onSubmit={(values) => {
-          h.push(`/u?q=${values.q}`);
+          navigate(`/u?q=${values.q}`);
         }}
       >
         {({ getFieldProps }) => (
