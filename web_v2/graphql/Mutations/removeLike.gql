@@ -1,0 +1,3 @@
+mutation RemoveLike($storyId: String!) {
+  removeLike(storyId: $storyId)
+}

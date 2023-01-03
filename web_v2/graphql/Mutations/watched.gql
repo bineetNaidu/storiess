@@ -1,0 +1,3 @@
+mutation Watched($storyId: String!) {
+  watched(storyId: $storyId)
+}

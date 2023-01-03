@@ -1,0 +1,6 @@
+query Stories {
+  stories {
+    ...BaseStory
+    isWatched
+  }
+}

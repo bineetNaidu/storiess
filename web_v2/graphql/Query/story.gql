@@ -1,0 +1,18 @@
+query Story($storyId: String!) {
+  story(storyId: $storyId) {
+    _id
+    image_url
+    filename
+    likes {
+      _id
+    }
+    user {
+      _id
+      avatar
+      username
+    }
+    likeStatus
+    watched
+    createdAt
+  }
+}

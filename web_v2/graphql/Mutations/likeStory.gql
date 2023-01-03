@@ -1,0 +1,3 @@
+mutation LikeStory($storyId: String!) {
+  likeStory(storyId: $storyId)
+}
