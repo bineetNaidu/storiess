@@ -32,72 +32,72 @@ const documents = {
 };
 
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "fragment BaseStory on Story {\n  _id\n  image_url\n  filename\n  likes {\n    _id\n  }\n  user {\n    _id\n    avatar\n  }\n  likeStatus\n  watched\n  createdAt\n}"): (typeof documents)["fragment BaseStory on Story {\n  _id\n  image_url\n  filename\n  likes {\n    _id\n  }\n  user {\n    _id\n    avatar\n  }\n  likeStatus\n  watched\n  createdAt\n}"];
+export function graphql(source: "fragment BaseStory on Story {\n  _id\n  image_url\n  filename\n  likes {\n    _id\n  }\n  user {\n    _id\n    avatar\n  }\n  likeStatus\n  watched\n  createdAt\n}"): (typeof documents)["fragment BaseStory on Story {\n  _id\n  image_url\n  filename\n  likes {\n    _id\n  }\n  user {\n    _id\n    avatar\n  }\n  likeStatus\n  watched\n  createdAt\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "fragment BaseUser on User {\n  _id\n  email\n  username\n  avatar\n  bio\n}"): (typeof documents)["fragment BaseUser on User {\n  _id\n  email\n  username\n  avatar\n  bio\n}"];
+export function graphql(source: "fragment BaseUser on User {\n  _id\n  email\n  username\n  avatar\n  bio\n}"): (typeof documents)["fragment BaseUser on User {\n  _id\n  email\n  username\n  avatar\n  bio\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation LikeStory($storyId: String!) {\n  likeStory(storyId: $storyId)\n}"): (typeof documents)["mutation LikeStory($storyId: String!) {\n  likeStory(storyId: $storyId)\n}"];
+export function graphql(source: "mutation LikeStory($storyId: String!) {\n  likeStory(storyId: $storyId)\n}"): (typeof documents)["mutation LikeStory($storyId: String!) {\n  likeStory(storyId: $storyId)\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation Login($input: UserInput!) {\n  login(input: $input) {\n    ...BaseUser\n  }\n}"): (typeof documents)["mutation Login($input: UserInput!) {\n  login(input: $input) {\n    ...BaseUser\n  }\n}"];
+export function graphql(source: "mutation Login($input: UserInput!) {\n  login(input: $input) {\n    ...BaseUser\n  }\n}"): (typeof documents)["mutation Login($input: UserInput!) {\n  login(input: $input) {\n    ...BaseUser\n  }\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation Logout {\n  logout\n}"): (typeof documents)["mutation Logout {\n  logout\n}"];
+export function graphql(source: "mutation Logout {\n  logout\n}"): (typeof documents)["mutation Logout {\n  logout\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation RemoveLike($storyId: String!) {\n  removeLike(storyId: $storyId)\n}"): (typeof documents)["mutation RemoveLike($storyId: String!) {\n  removeLike(storyId: $storyId)\n}"];
+export function graphql(source: "mutation RemoveLike($storyId: String!) {\n  removeLike(storyId: $storyId)\n}"): (typeof documents)["mutation RemoveLike($storyId: String!) {\n  removeLike(storyId: $storyId)\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation RemoveStory($storyId: String!) {\n  removeStory(storyId: $storyId)\n}"): (typeof documents)["mutation RemoveStory($storyId: String!) {\n  removeStory(storyId: $storyId)\n}"];
+export function graphql(source: "mutation RemoveStory($storyId: String!) {\n  removeStory(storyId: $storyId)\n}"): (typeof documents)["mutation RemoveStory($storyId: String!) {\n  removeStory(storyId: $storyId)\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation ReportStory($storyId: String!) {\n  reportStory(storyId: $storyId) {\n    _id\n    reportedStoryId\n    from\n    reportType\n    createdAt\n  }\n}"): (typeof documents)["mutation ReportStory($storyId: String!) {\n  reportStory(storyId: $storyId) {\n    _id\n    reportedStoryId\n    from\n    reportType\n    createdAt\n  }\n}"];
+export function graphql(source: "mutation ReportStory($storyId: String!) {\n  reportStory(storyId: $storyId) {\n    _id\n    reportedStoryId\n    from\n    reportType\n    createdAt\n  }\n}"): (typeof documents)["mutation ReportStory($storyId: String!) {\n  reportStory(storyId: $storyId) {\n    _id\n    reportedStoryId\n    from\n    reportType\n    createdAt\n  }\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation ReportUser($userId: String!) {\n  reportUser(userId: $userId) {\n    _id\n    reportedUserId\n    from\n    reportType\n    createdAt\n  }\n}"): (typeof documents)["mutation ReportUser($userId: String!) {\n  reportUser(userId: $userId) {\n    _id\n    reportedUserId\n    from\n    reportType\n    createdAt\n  }\n}"];
+export function graphql(source: "mutation ReportUser($userId: String!) {\n  reportUser(userId: $userId) {\n    _id\n    reportedUserId\n    from\n    reportType\n    createdAt\n  }\n}"): (typeof documents)["mutation ReportUser($userId: String!) {\n  reportUser(userId: $userId) {\n    _id\n    reportedUserId\n    from\n    reportType\n    createdAt\n  }\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation UpdateUser($bio: String!) {\n  updateUser(bio: $bio) {\n    ...BaseUser\n  }\n}"): (typeof documents)["mutation UpdateUser($bio: String!) {\n  updateUser(bio: $bio) {\n    ...BaseUser\n  }\n}"];
+export function graphql(source: "mutation UpdateUser($bio: String!) {\n  updateUser(bio: $bio) {\n    ...BaseUser\n  }\n}"): (typeof documents)["mutation UpdateUser($bio: String!) {\n  updateUser(bio: $bio) {\n    ...BaseUser\n  }\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation Watched($storyId: String!) {\n  watched(storyId: $storyId)\n}"): (typeof documents)["mutation Watched($storyId: String!) {\n  watched(storyId: $storyId)\n}"];
+export function graphql(source: "mutation Watched($storyId: String!) {\n  watched(storyId: $storyId)\n}"): (typeof documents)["mutation Watched($storyId: String!) {\n  watched(storyId: $storyId)\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query Me {\n  me {\n    ...BaseUser\n  }\n}"): (typeof documents)["query Me {\n  me {\n    ...BaseUser\n  }\n}"];
+export function graphql(source: "query Me {\n  me {\n    ...BaseUser\n  }\n}"): (typeof documents)["query Me {\n  me {\n    ...BaseUser\n  }\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query SearchUser($query: String!) {\n  searchUser(query: $query) {\n    _id\n    username\n    avatar\n  }\n}"): (typeof documents)["query SearchUser($query: String!) {\n  searchUser(query: $query) {\n    _id\n    username\n    avatar\n  }\n}"];
+export function graphql(source: "query SearchUser($query: String!) {\n  searchUser(query: $query) {\n    _id\n    username\n    avatar\n  }\n}"): (typeof documents)["query SearchUser($query: String!) {\n  searchUser(query: $query) {\n    _id\n    username\n    avatar\n  }\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query Stories {\n  stories {\n    ...BaseStory\n    isWatched\n  }\n}"): (typeof documents)["query Stories {\n  stories {\n    ...BaseStory\n    isWatched\n  }\n}"];
+export function graphql(source: "query Stories {\n  stories {\n    ...BaseStory\n    isWatched\n  }\n}"): (typeof documents)["query Stories {\n  stories {\n    ...BaseStory\n    isWatched\n  }\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query Story($storyId: String!) {\n  story(storyId: $storyId) {\n    _id\n    image_url\n    filename\n    likes {\n      _id\n    }\n    user {\n      _id\n      avatar\n      username\n    }\n    likeStatus\n    watched\n    createdAt\n  }\n}"): (typeof documents)["query Story($storyId: String!) {\n  story(storyId: $storyId) {\n    _id\n    image_url\n    filename\n    likes {\n      _id\n    }\n    user {\n      _id\n      avatar\n      username\n    }\n    likeStatus\n    watched\n    createdAt\n  }\n}"];
+export function graphql(source: "query Story($storyId: String!) {\n  story(storyId: $storyId) {\n    _id\n    image_url\n    filename\n    likes {\n      _id\n    }\n    user {\n      _id\n      avatar\n      username\n    }\n    likeStatus\n    watched\n    createdAt\n  }\n}"): (typeof documents)["query Story($storyId: String!) {\n  story(storyId: $storyId) {\n    _id\n    image_url\n    filename\n    likes {\n      _id\n    }\n    user {\n      _id\n      avatar\n      username\n    }\n    likeStatus\n    watched\n    createdAt\n  }\n}"];
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query User($id: String!) {\n  user(id: $id) {\n    ...BaseUser\n  }\n}"): (typeof documents)["query User($id: String!) {\n  user(id: $id) {\n    ...BaseUser\n  }\n}"];
+export function graphql(source: "query User($id: String!) {\n  user(id: $id) {\n    ...BaseUser\n  }\n}"): (typeof documents)["query User($id: String!) {\n  user(id: $id) {\n    ...BaseUser\n  }\n}"];
 
 /**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  *
  *
  * @example
@@ -108,9 +108,9 @@ export function gql(source: "query User($id: String!) {\n  user(id: $id) {\n    
  * The query argument is unknown!
  * Please regenerate the types.
 **/
-export function gql(source: string): unknown;
+export function graphql(source: string): unknown;
 
-export function gql(source: string) {
+export function graphql(source: string) {
   return (documents as any)[source] ?? {};
 }
 

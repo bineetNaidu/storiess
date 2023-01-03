@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "2.16.2",
-    "@graphql-codegen/client-preset": "1.2.4",
-    "@graphql-codegen/gql-tag-operations-preset": "^1.7.3"
+    "@graphql-codegen/client-preset": "1.2.4"
   }
 }

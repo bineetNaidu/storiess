@@ -149,9 +149,9 @@ export type UserInput = {
   username: Scalars['String'];
 };
 
-export type BaseStoryFragment = { __typename?: 'Story', _id: string, image_url: string, filename: string, likeStatus?: boolean | null, watched: Array<string>, createdAt: any, likes: Array<{ __typename?: 'Like', _id: string }>, user: { __typename?: 'User', _id: string, avatar: string } };
+export type BaseStoryFragment = { __typename?: 'Story', _id: string, image_url: string, filename: string, likeStatus?: boolean | null, watched: Array<string>, createdAt: any, likes: Array<{ __typename?: 'Like', _id: string }>, user: { __typename?: 'User', _id: string, avatar: string } } & { ' $fragmentName'?: 'BaseStoryFragment' };
 
-export type BaseUserFragment = { __typename?: 'User', _id: string, email: string, username: string, avatar: string, bio?: string | null };
+export type BaseUserFragment = { __typename?: 'User', _id: string, email: string, username: string, avatar: string, bio?: string | null } & { ' $fragmentName'?: 'BaseUserFragment' };
 
 export type LikeStoryMutationVariables = Exact<{
   storyId: Scalars['String'];
@@ -165,7 +165,10 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'User', _id: string, email: string, username: string, avatar: string, bio?: string | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: (
+    { __typename?: 'User' }
+    & { ' $fragmentRefs'?: { 'BaseUserFragment': BaseUserFragment } }
+  ) };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -205,7 +208,10 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', _id: string, email: string, username: string, avatar: string, bio?: string | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: (
+    { __typename?: 'User' }
+    & { ' $fragmentRefs'?: { 'BaseUserFragment': BaseUserFragment } }
+  ) };
 
 export type WatchedMutationVariables = Exact<{
   storyId: Scalars['String'];
@@ -217,7 +223,10 @@ export type WatchedMutation = { __typename?: 'Mutation', watched: boolean };
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', _id: string, email: string, username: string, avatar: string, bio?: string | null } | null };
+export type MeQuery = { __typename?: 'Query', me?: (
+    { __typename?: 'User' }
+    & { ' $fragmentRefs'?: { 'BaseUserFragment': BaseUserFragment } }
+  ) | null };
 
 export type SearchUserQueryVariables = Exact<{
   query: Scalars['String'];
@@ -229,7 +238,10 @@ export type SearchUserQuery = { __typename?: 'Query', searchUser: Array<{ __type
 export type StoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StoriesQuery = { __typename?: 'Query', stories: Array<{ __typename?: 'Story', isWatched?: boolean | null, _id: string, image_url: string, filename: string, likeStatus?: boolean | null, watched: Array<string>, createdAt: any, likes: Array<{ __typename?: 'Like', _id: string }>, user: { __typename?: 'User', _id: string, avatar: string } }> };
+export type StoriesQuery = { __typename?: 'Query', stories: Array<(
+    { __typename?: 'Story', isWatched?: boolean | null }
+    & { ' $fragmentRefs'?: { 'BaseStoryFragment': BaseStoryFragment } }
+  )> };
 
 export type StoryQueryVariables = Exact<{
   storyId: Scalars['String'];
@@ -243,7 +255,10 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string, email: string, username: string, avatar: string, bio?: string | null } | null };
+export type UserQuery = { __typename?: 'Query', user?: (
+    { __typename?: 'User' }
+    & { ' $fragmentRefs'?: { 'BaseUserFragment': BaseUserFragment } }
+  ) | null };
 
 export const BaseStoryFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BaseStory"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Story"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"image_url"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"likes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}}]}},{"kind":"Field","name":{"kind":"Name","value":"likeStatus"}},{"kind":"Field","name":{"kind":"Name","value":"watched"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<BaseStoryFragment, unknown>;
 export const BaseUserFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BaseUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}}]}}]} as unknown as DocumentNode<BaseUserFragment, unknown>;
