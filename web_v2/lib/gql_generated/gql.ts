@@ -13,6 +13,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
+    "\n  query Me {\n    me {\n      ...BaseUser\n    }\n  }\n": types.MeDocument,
+    "\n  mutation Logout {\n    logout\n  }\n": types.LogoutDocument,
     "fragment BaseStory on Story {\n  _id\n  image_url\n  filename\n  likes {\n    _id\n  }\n  user {\n    _id\n    avatar\n  }\n  likeStatus\n  watched\n  createdAt\n}": types.BaseStoryFragmentDoc,
     "fragment BaseUser on User {\n  _id\n  email\n  username\n  avatar\n  bio\n}": types.BaseUserFragmentDoc,
     "mutation LikeStory($storyId: String!) {\n  likeStory(storyId: $storyId)\n}": types.LikeStoryDocument,
@@ -29,8 +31,17 @@ const documents = {
     "query Stories {\n  stories {\n    ...BaseStory\n    isWatched\n  }\n}": types.StoriesDocument,
     "query Story($storyId: String!) {\n  story(storyId: $storyId) {\n    _id\n    image_url\n    filename\n    likes {\n      _id\n    }\n    user {\n      _id\n      avatar\n      username\n    }\n    likeStatus\n    watched\n    createdAt\n  }\n}": types.StoryDocument,
     "query User($id: String!) {\n  user(id: $id) {\n    ...BaseUser\n  }\n}": types.UserDocument,
+    "\n  query Stories {\n    stories {\n      ...BaseStory\n      isWatched\n    }\n  }\n": types.StoriesDocument,
 };
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query Me {\n    me {\n      ...BaseUser\n    }\n  }\n"): (typeof documents)["\n  query Me {\n    me {\n      ...BaseUser\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation Logout {\n    logout\n  }\n"): (typeof documents)["\n  mutation Logout {\n    logout\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -95,6 +106,10 @@ export function graphql(source: "query Story($storyId: String!) {\n  story(story
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query User($id: String!) {\n  user(id: $id) {\n    ...BaseUser\n  }\n}"): (typeof documents)["query User($id: String!) {\n  user(id: $id) {\n    ...BaseUser\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query Stories {\n    stories {\n      ...BaseStory\n      isWatched\n    }\n  }\n"): (typeof documents)["\n  query Stories {\n    stories {\n      ...BaseStory\n      isWatched\n    }\n  }\n"];
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
