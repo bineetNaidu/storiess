@@ -1,6 +1,6 @@
 import request from 'graphql-request';
 import { graphql } from '../lib/gql_generated/gql';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Layout } from '../components/Layout';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -13,17 +13,28 @@ import {
 import { Story } from '../components/Story';
 import { NewToSiteModal } from '../components/NewToSiteModal';
 import { Header } from '../components/Header';
+import { GetServerSideProps, NextPageContext } from 'next';
+import { meQuery, storiesQuery } from '../lib/queries';
 
-const StoriesQuery = graphql(`
-  query Stories {
-    stories {
-      ...BaseStory
-      isWatched
-    }
-  }
-`);
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const data = await request('http://localhost:4000/graphql', meQuery);
 
-export default function Home() {
+  if (!data.me)
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {
+      me: data.me,
+    },
+  };
+};
+
+export default function Home(props: any) {
   const {
     isOpen: isNTSmodalOpen,
     onOpen: onNTSModalopen,
@@ -34,14 +45,19 @@ export default function Home() {
     isLoading: isStoriesDataLoading,
     refetch,
   } = useQuery(['stories'], async () =>
-    request('http://localhost:4000/graphql', StoriesQuery)
+    request('http://localhost:4000/graphql', storiesQuery)
   );
+  const isMounted = useRef(false);
 
   useEffect(() => {
-    const isNewToStory = localStorage.getItem('stories:nts');
-    if (!isNewToStory) {
-      localStorage.setItem('stories:nts', 'true');
-      onNTSModalopen();
+    if (!isMounted.current) {
+      const isNewToStory = localStorage.getItem('stories:nts');
+      if (!isNewToStory) {
+        localStorage.setItem('stories:nts', 'true');
+        onNTSModalopen();
+      }
+      isMounted.current = true;
+      return;
     }
   }, [onNTSModalopen]);
   return (
